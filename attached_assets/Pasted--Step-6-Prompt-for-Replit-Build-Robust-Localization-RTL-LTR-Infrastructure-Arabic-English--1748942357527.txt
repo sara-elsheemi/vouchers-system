@@ -1,0 +1,54 @@
+🔄 **Step 6 Prompt for Replit: Build Robust Localization & RTL/LTR Infrastructure (Arabic/English)**
+
+---
+
+## 🌍 Objective
+
+Set up a full-featured, production-quality localization system supporting:
+- Both **Arabic (ar)** and **English (en)** languages.
+- **Automatic direction switching:** LTR for English, **RTL for Arabic**—with flawless layout, UI alignment, and component mirroring as needed.
+
+---
+
+## 🏗️ Requirements
+
+- **i18n Integration**: Use an industry-standard localization library for your stack (e.g., `react-i18next` for React, `i18next` for backend Node, etc.).
+- **Folder Structure**: Organize translations as `/locales/en/` and `/locales/ar/`. Place at least one test string per language for proof.
+- **Global Provider**: Wrap the entire frontend (and backend if needed) with the localization provider, so every page/component gets access to language and direction context.
+- **Language Switcher**: Build a demo UI component to switch between Arabic and English **at runtime** (no reload required).
+- **Directionality Logic**:
+    - Automatically set `<html dir="rtl">` for Arabic and `<html dir="ltr">` for English.
+    - Ensure body, main containers, and all components update direction and alignment immediately on language change.
+    - Components, nav bars, input fields, buttons, and tables must **mirror correctly** (test both languages!).
+- **Visual Test Page**: Create a test/demo page with examples of:
+    - Headings, paragraphs, inputs, buttons, tables, and menus.
+    - Show both languages, switching direction live.
+    - Add a simple visual marker or banner: “Current language: EN / AR | Direction: LTR / RTL”.
+
+---
+
+## 📝 Developer Guidance
+
+- Do **not** rely only on CSS logical properties unless the design system is fully compatible with RTL.
+- **Visually test** all components in both English and Arabic—ensure no layout breaks, overflows, or misalignments.
+- Make sure all spacing, padding, icon alignment, and flows look natural in both directions.
+
+---
+
+## 🚫 Do NOT
+
+- Do not implement any actual translations for app features yet—focus only on infrastructure and switching logic.
+- Do not proceed to business logic or UI features until this foundation is **fully working and visually verified**.
+
+---
+
+## ✅ Deliverables
+
+- i18n infrastructure: folder, provider, and sample files for en/ar.
+- Fully working runtime language switcher.
+- RTL/LTR direction logic applied globally and tested on a sample page.
+- README notes: How to add new languages, how to visually check RTL/LTR for new components.
+
+---
+
+**Stop after setup, and wait for my next step. Do not proceed further until confirmed.**

@@ -1,0 +1,32 @@
+🔒 **Step 3 Prompt for Replit: Enforce Security Best Practices **
+---
+## 🛡️ Security Considerations
+When generating code or setting up any part of the project, you **must** strictly adhere to the following security measures:
+### 1. Sensitive Data Protection
+- **Never expose** API keys, credentials, or secrets in public code, comments, or repositories.
+- Store all secrets in environment variables using Replit’s secrets management or a secure `.env` file.  
+- **Never commit secrets** or sensitive files to version control.
+### 2. Strong Authentication
+- Do **not** use default or weak authentication methods.
+- Always implement robust authentication (e.g., hashed passwords, OAuth, JWT).  
+- Support multi-factor authentication where possible.
+### 3. Secure Secret Management
+- Always reference secrets from environment variables, **not** hardcoded in code.
+- **Never print or log** secrets or environment variables.
+### 4. Input Validation & Sanitization
+- Validate and sanitize **all** user input to prevent injection attacks (SQL injection, XSS, etc.).
+- Use established validation libraries suitable for your programming language/framework.
+### 5. Access Control
+- Avoid making your Replit projects or files publicly writable unless absolutely necessary.
+- Set strict permissions for collaborators and restrict editing access as much as possible.
+### 6. Database Security
+- **Never expose** database credentials in code.
+- Connect to databases securely using environment variables, and restrict DB access to trusted IPs only.
+### 7. Dependency Management
+- Regularly update dependencies and check for vulnerabilities (e.g., `npm audit`, `pip-audit`).
+- Avoid untrusted or outdated third-party libraries.
+### 8. Permissions & Access Review
+- Review and set correct access controls on all project resources and files.
+- Limit access to sensitive files so only authorized users can view or modify them.
+---
+**Wait for the next step before continuing. Do not proceed with implementation or code generation until further instructions.**

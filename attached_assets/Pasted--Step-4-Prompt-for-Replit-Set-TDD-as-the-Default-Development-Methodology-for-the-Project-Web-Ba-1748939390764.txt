@@ -1,0 +1,52 @@
+**Step 4 Prompt for Replit: Set TDD as the Default Development Methodology for the Project (Web & Backend)**
+
+---
+
+## 🏗️ **Development Methodology: Test-Driven Development (TDD) – Always**
+
+This is **not just a one-time requirement, but the permanent methodology for ALL development in the project—web and backend.**
+
+---
+
+### **Instructions**
+
+- **From now on, for every new feature, fix, or enhancement I request:**  
+  - **Apply test-driven development (TDD) as the standard workflow.**
+  - **Never start implementation before tests.**  
+  - This applies end-to-end: backend, web frontend (from pages to components), and integrations.
+
+#### **For every feature or module:**
+1. **Write automated tests first**  
+   - Cover requirements, user stories, and acceptance criteria.
+   - Include normal, edge, and error scenarios.
+2. **Run the tests** to confirm they fail (no implementation yet).
+3. **Write only the minimal code** needed to make the tests pass.
+4. **Refactor and improve code** as needed, keeping all tests passing.
+5. **Repeat** this cycle for every new feature, fix, or change in either project.
+
+---
+
+### **TDD Checklist (for both web & backend)**
+
+- Use the most appropriate testing frameworks:
+  - **Go backend:** `go test`, `Testify`, etc.
+  - **React web frontend:** `Jest`, `React Testing Library`, etc.
+- Organize tests logically (`/tests` or next to modules/components).
+- Write at least **one meaningful test** for every exported function, endpoint, or UI component/page.
+- Maintain and increase code coverage on business logic.
+- Document test cases and update as features evolve.
+- **Tests must run automatically in CI/CD**, and before each commit or PR.
+
+---
+
+### **Summary**
+
+- TDD is the default, required dev process for the project web and backend.
+- For **EVERY feature prompt I send in the future**,  
+  - **You must first implement all required tests, then the feature, then refactor.**
+- No business logic should be implemented or changed unless covered by automated tests first.
+
+---
+
+**DO NOT begin implementation until my next step.  
+Wait for further feature or requirement instructions.**

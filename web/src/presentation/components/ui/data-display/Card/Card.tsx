@@ -1,7 +1,7 @@
 import React from 'react';
 import { type VariantProps } from 'class-variance-authority';
-import { cn } from '../../../../utils/cn';
-import { cardVariants } from '../../../../utils/variants';
+import { cn } from '../../../../../application/utils/cn';
+import { cardVariants } from '../../../../../application/utils/variants';
 
 export interface CardProps
   extends React.HTMLAttributes<HTMLDivElement>,

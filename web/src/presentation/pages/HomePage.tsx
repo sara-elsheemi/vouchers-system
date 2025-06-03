@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button } from '../components/Button/Button';
+import { Button } from '../components/ui/core/Button/Button';
 import { Card } from '../components/ui/data-display/Card/Card';
-import { Badge } from '../components/ui/data-display/Badge/Badge';
+import { Badge } from '../components/ui/core/Badge/Badge';
 import { Input } from '../components/ui/forms/Input/Input';
 import { Select } from '../components/ui/forms/Select/Select';
 import { Breadcrumbs } from '../components/ui/Breadcrumbs/Breadcrumbs';
 import { Alert } from '../components/ui/feedback/Alert/Alert';
-import { Progress } from '../components/ui/feedback/Progress/Progress';
+import { Progress } from '../components/ui/data-display/Progress/Progress';
 
 export const HomePage: React.FC = () => {
   const breadcrumbItems = [

@@ -34,11 +34,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd web && npm install && npm run dev"
+args = "cd web && npm run dev"
 waitForPort = 3000
 
 [deployment]
 run = ["sh", "-c", "go run main.go"]
+
+[[ports]]
+localPort = 3000
+externalPort = 3000
 
 [[ports]]
 localPort = 5000

@@ -1,11 +1,13 @@
-import { SimpleLocalizationDemo } from '../presentation/pages/SimpleLocalizationDemo';
-import '../presentation/styles/globals.css';
+import { LocalizationProvider } from '../application/i18n/LocalizationProvider';
+import { FontDemoPage } from '../presentation/pages/FontDemoPage';
 
 function App() {
   return (
-    <div className="App">
-      <SimpleLocalizationDemo />
-    </div>
+    <LocalizationProvider>
+      <div className="App">
+        <FontDemoPage />
+      </div>
+    </LocalizationProvider>
   );
 }
 

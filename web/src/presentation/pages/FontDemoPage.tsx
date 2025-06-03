@@ -136,58 +136,58 @@ export const FontDemoPage: React.FC = () => {
 
         {/* UI Components Sample */}
         <div className="bg-white rounded-lg shadow-sm border p-6">
-          <h2 className="text-2xl font-bold mb-6 text-gray-900">UI Components with SakrPro</h2>
+          <h2 className="text-2xl font-bold mb-6 text-gray-900">{t('fontDemo.uiComponents')}</h2>
           
           <div className="space-y-6">
             {/* Buttons */}
             <div>
-              <h3 className="text-lg font-medium mb-3 text-gray-900">Buttons</h3>
+              <h3 className="text-lg font-medium mb-3 text-gray-900">{t('fontDemo.buttons')}</h3>
               <div className="flex flex-wrap gap-3">
                 <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
-                  Primary Button
+                  {t('fontDemo.uiElements.primaryButton')}
                 </button>
                 <button className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors">
-                  Secondary Button
+                  {t('fontDemo.uiElements.secondaryButton')}
                 </button>
                 <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
-                  Outline Button
+                  {t('fontDemo.uiElements.outlineButton')}
                 </button>
               </div>
             </div>
 
             {/* Form Elements */}
             <div>
-              <h3 className="text-lg font-medium mb-3 text-gray-900">Form Elements</h3>
+              <h3 className="text-lg font-medium mb-3 text-gray-900">{t('fontDemo.formElements')}</h3>
               <div className="space-y-3 max-w-md">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Text Input
+                    {t('fontDemo.uiElements.textInput')}
                   </label>
                   <input
                     type="text"
-                    placeholder="Enter text here..."
+                    placeholder={t('fontDemo.uiElements.textInputPlaceholder')}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Textarea
+                    {t('fontDemo.uiElements.textarea')}
                   </label>
                   <textarea
-                    placeholder="Enter longer text here..."
+                    placeholder={t('fontDemo.uiElements.textareaPlaceholder')}
                     rows={3}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Select Dropdown
+                    {t('fontDemo.uiElements.selectDropdown')}
                   </label>
                   <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option>Choose an option</option>
-                    <option>Option 1</option>
-                    <option>Option 2</option>
-                    <option>Option 3</option>
+                    <option>{t('fontDemo.uiElements.chooseOption')}</option>
+                    <option>{t('fontDemo.uiElements.option1')}</option>
+                    <option>{t('fontDemo.uiElements.option2')}</option>
+                    <option>{t('fontDemo.uiElements.option3')}</option>
                   </select>
                 </div>
               </div>

@@ -3,7 +3,7 @@ import { Button } from '../components/ui/core/Button/Button';
 import { Card } from '../components/ui/data-display/Card/Card';
 import { Badge } from '../components/ui/core/Badge/Badge';
 import { Input } from '../components/ui/forms/Input/Input';
-import { Select } from '../components/ui/forms/Select/Select';
+
 import { Breadcrumbs } from '../components/ui/Breadcrumbs/Breadcrumbs';
 import { Alert } from '../components/ui/feedback/Alert/Alert';
 import { Progress } from '../components/ui/data-display/Progress/Progress';
@@ -39,7 +39,7 @@ export const HomePage: React.FC = () => {
             <Alert variant="warning" title="Warning">
               This is a test page showcasing the design system components.
             </Alert>
-            <Alert variant="error" title="Error">
+            <Alert variant="destructive" title="Error">
               This is an example error alert component.
             </Alert>
           </div>
@@ -71,11 +71,7 @@ export const HomePage: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Select Dropdown
               </label>
-              <Select placeholder="Select an option">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-              </Select>
+              <Input placeholder="Select an option (using Input as placeholder)" />
             </div>
           </div>
         </Card>
@@ -89,7 +85,7 @@ export const HomePage: React.FC = () => {
               <Badge variant="secondary">Secondary</Badge>
               <Badge variant="success">Success</Badge>
               <Badge variant="warning">Warning</Badge>
-              <Badge variant="error">Error</Badge>
+              <Badge variant="destructive">Destructive</Badge>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">

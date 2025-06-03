@@ -26,7 +26,7 @@ export * from './presentation/components/ui/forms/Textarea';
 // Components for navigation and wayfinding
 export * from './presentation/components/ui/navigation/Navigation';
 export * from './presentation/components/ui/navigation/Tabs';
-export * from './presentation/components/ui/Breadcrumbs';
+// export * from './presentation/components/ui/Breadcrumbs/Breadcrumbs'; // Temporarily disabled
 export * from './presentation/components/ui/navigation/Pagination';
 export * from './presentation/components/ui/navigation/Sidebar';
 

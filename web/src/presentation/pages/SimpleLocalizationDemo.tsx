@@ -300,23 +300,23 @@ export const SimpleLocalizationDemo: React.FC = () => {
         {/* Navigation Menu Test */}
         <div className="p-8 bg-white rounded-lg shadow-sm border border-gray-200">
           <h3 className="text-xl font-semibold text-gray-900 mb-4">
-            Navigation Menu Test
+            {t.navigationMenuTest}
           </h3>
           <nav className="flex flex-wrap gap-1 bg-gray-100 p-1 rounded-lg">
             <a href="#" className="px-4 py-2 rounded-md bg-white shadow-sm text-gray-900 font-medium">
-              Home
+              {t.home}
             </a>
             <a href="#" className="px-4 py-2 rounded-md text-gray-600 hover:bg-white hover:shadow-sm">
-              Products
+              {t.products}
             </a>
             <a href="#" className="px-4 py-2 rounded-md text-gray-600 hover:bg-white hover:shadow-sm">
-              Services
+              {t.services}
             </a>
             <a href="#" className="px-4 py-2 rounded-md text-gray-600 hover:bg-white hover:shadow-sm">
-              About
+              {t.about}
             </a>
             <a href="#" className="px-4 py-2 rounded-md text-gray-600 hover:bg-white hover:shadow-sm">
-              Contact
+              {t.contact}
             </a>
           </nav>
         </div>
@@ -324,32 +324,32 @@ export const SimpleLocalizationDemo: React.FC = () => {
         {/* Layout Test */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="p-6 bg-white rounded-lg shadow-sm border border-gray-200">
-            <h4 className="text-lg font-semibold mb-3">Card 1</h4>
+            <h4 className="text-lg font-semibold mb-3">{t.card1Title}</h4>
             <p className="text-gray-600 mb-4">
-              This card tests how content flows in different directions.
+              {t.card1Description}
             </p>
             <button className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              Action
+              {t.action}
             </button>
           </div>
           
           <div className="p-6 bg-white rounded-lg shadow-sm border border-gray-200">
-            <h4 className="text-lg font-semibold mb-3">Card 2</h4>
+            <h4 className="text-lg font-semibold mb-3">{t.card2Title}</h4>
             <p className="text-gray-600 mb-4">
-              Notice how buttons, text alignment, and spacing adapt automatically.
+              {t.card2Description}
             </p>
             <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              Primary Action
+              {t.primaryAction}
             </button>
           </div>
           
           <div className="p-6 bg-white rounded-lg shadow-sm border border-gray-200">
-            <h4 className="text-lg font-semibold mb-3">Card 3</h4>
+            <h4 className="text-lg font-semibold mb-3">{t.card3Title}</h4>
             <p className="text-gray-600 mb-4">
-              The layout maintains visual consistency across both directions.
+              {t.card3Description}
             </p>
             <button className="w-full px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
-              Secondary Action
+              {t.secondaryAction}
             </button>
           </div>
         </div>

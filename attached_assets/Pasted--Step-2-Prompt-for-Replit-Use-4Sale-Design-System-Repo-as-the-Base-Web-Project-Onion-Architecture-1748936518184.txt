@@ -1,0 +1,85 @@
+**Step 2 Prompt for Replit: Use 4Sale Design System Repo as the Base Web Project (Onion Architecture)**
+
+---
+
+## Objective
+
+Set up the entire React frontend under `/web` **by cloning and using the official design system repo as the starting point for the web project**.
+
+- **Repo:** https://github.com/4SaleTech/web-design-system
+
+**Do NOT scaffold a new app or generate a blank project.  
+The imported design system repo IS the base project.  
+You will reorganize the structure to match onion architecture inside `/web`.**
+
+---
+
+## Instructions
+
+1. **Clone the 4Sale Design System repo** (`https://github.com/4SaleTech/web-design-system`) into `/web`.
+
+2. **Treat the cloned repo as the root of your frontend project.**
+   - All future frontend development will happen within this codebase.
+
+3. **Reorganize the folders and files in `/web`** to follow the onion architecture standard:
+
+/web/
+/src/
+/app/           # App config (App.tsx, providers, routing)
+/presentation/  # UI: pages, layouts, components, design system usage
+/domain/        # Domain models, types, validation logic
+/application/   # Hooks, business flows, use cases
+/infrastructure/# API clients, gateways, services
+/public/
+package.json
+README.md
+
+- Move existing components, utilities, and assets into the correct onion layers as needed.
+- **Do not remove or modify any official design system code except to fit this structure.**
+- No files should exist outside `/web`.
+
+4. **Project Tech Stack**
+- Use the *exact* tech stack, dependencies, and configuration as in the original design system repo.  
+- No changes to frameworks, tooling, or core packages unless specifically instructed.
+
+5. **Design System Usage**
+- All UI, style, and design logic must come directly from the imported repo.
+- Never generate, copy, or scaffold a second design system.
+- No external UI libraries or custom styles allowed unless explicitly approved.
+
+6. **Authentication**
+- If you need access to the private repo, PROMPT ME for a GitHub token and pause until you receive it.
+
+7. **Verification**
+- Build a test home page in `/web/src/presentation` using the official design system components to confirm everything is wired up.
+- All colors, fonts, layouts, and tokens must render exactly as defined in the imported repo.
+
+8. **README**
+- Update `/web/README.md` to document the architecture, import process, and design system usage.
+
+---
+
+## Absolutely Do NOT
+
+- Do **not** generate a new React app from scratch.
+- Do **not** add any design system, theme, or UI framework other than the imported repo.
+- Do **not** move or develop any frontend files outside `/web`.
+- Do **not** build new app features yet—focus on setup and structure.
+
+---
+
+## Deliverables
+
+- Full web codebase under `/web` with the official design system as the foundation.
+- Onion architecture applied on top of the design system repo.
+- Test home page using all available design system components.
+- All tech stack, config, and UI logic matches the original repo.
+
+---
+
+**IMPORTANT:**  
+If you cannot access the design system repo, PROMPT ME IMMEDIATELY for a GitHub token and do not proceed.
+
+---
+
+**Wait for my next instructions before moving to further steps.**

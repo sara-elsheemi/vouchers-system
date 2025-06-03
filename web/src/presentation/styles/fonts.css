@@ -1,0 +1,64 @@
+/* SakrPro Font Family - Custom Web Font Integration */
+
+@font-face {
+  font-family: 'SakrPro';
+  src: url('/fonts/sakrPro-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SakrPro';
+  src: url('/fonts/sakrPro-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SakrPro';
+  src: url('/fonts/sakrPro-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SakrPro';
+  src: url('/fonts/sakrPro-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Global Font Reset - SakrPro as the ONLY font */
+* {
+  font-family: 'SakrPro';
+}
+
+html {
+  font-family: 'SakrPro';
+}
+
+body {
+  font-family: 'SakrPro';
+}
+
+/* Ensure all elements inherit SakrPro */
+h1, h2, h3, h4, h5, h6, p, span, div, section, article, aside, nav, header, footer, main, 
+button, input, textarea, select, option, label, legend, fieldset, table, th, td, tr, 
+ul, ol, li, dl, dt, dd, blockquote, pre, code, kbd, samp, var, sub, sup, small, strong, 
+em, b, i, u, mark, del, ins, q, cite, abbr, dfn, time, address {
+  font-family: 'SakrPro' !important;
+}
+
+/* Force SakrPro on all form elements */
+input, textarea, select, button {
+  font-family: 'SakrPro' !important;
+}
+
+/* Monospace elements also use SakrPro */
+pre, code, kbd, samp, var {
+  font-family: 'SakrPro' !important;
+}

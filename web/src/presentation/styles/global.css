@@ -1,0 +1,48 @@
+/* Global Styles - SakrPro Font Integration */
+@import url('./fonts.css');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base global styles */
+@layer base {
+  * {
+    font-family: 'SakrPro';
+  }
+  
+  html {
+    font-family: 'SakrPro';
+  }
+  
+  body {
+    font-family: 'SakrPro';
+    font-weight: 400;
+    line-height: 1.5;
+  }
+}
+
+/* Component layer overrides */
+@layer components {
+  .font-sakr {
+    font-family: 'SakrPro' !important;
+  }
+}
+
+/* Utility layer for font weights */
+@layer utilities {
+  .font-light {
+    font-weight: 300;
+  }
+  
+  .font-normal {
+    font-weight: 400;
+  }
+  
+  .font-medium {
+    font-weight: 500;
+  }
+  
+  .font-bold {
+    font-weight: 700;
+  }
+}

@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      port: 5000,
+      port: 3000,
       host: '0.0.0.0',
     },
     ...(isLib ? {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../../../../utils/cn';
+import { cn } from '../../../../../application/utils/cn';
 import { Badge } from '../../core/Badge';
 
 export interface TabItem {

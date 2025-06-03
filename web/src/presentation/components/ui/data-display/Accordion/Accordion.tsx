@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { cn } from '../../../../utils/cn';
+import { cn } from '../../../../../application/utils/cn';
 
 // Types
 interface AccordionContextValue {

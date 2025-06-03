@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../../../../utils/cn';
+import { cn } from '../../../../../application/utils/cn';
 import { Button } from '../../core/Button';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
 import { ChevronRight, Check } from 'lucide-react';
-import { cn } from '../../../../utils/cn';
+import { cn } from '../../../../../application/utils/cn';
 
 // Types
 interface DropdownMenuContextValue {

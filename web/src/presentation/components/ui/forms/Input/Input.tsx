@@ -1,7 +1,7 @@
 import React from 'react';
 import { type VariantProps } from 'class-variance-authority';
-import { cn } from '../../../../utils/cn';
-import { inputVariants } from '../../../../utils/variants';
+import { cn } from '../../../../../application/utils/cn';
+import { inputVariants } from '../../../../../application/utils/variants';
 import { Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 
 export interface InputProps

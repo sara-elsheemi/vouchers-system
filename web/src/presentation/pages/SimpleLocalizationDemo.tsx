@@ -14,6 +14,31 @@ const translations = {
     testParagraph: 'This is a test paragraph to demonstrate the localization system. It shows how text flows in left-to-right direction for English content.',
     buttonText: 'Click Me',
     inputPlaceholder: 'Enter your text here',
+    directionTest: 'Direction Test:',
+    directionTestDescription: 'This content automatically switches between LTR and RTL based on the selected language.',
+    dataTableTest: 'Data Table Test',
+    navigationMenuTest: 'Navigation Menu Test',
+    primaryBadge: 'Primary Badge',
+    secondaryBadge: 'Secondary Badge',
+    successBadge: 'Success Badge',
+    warningBadge: 'Warning Badge',
+    errorBadge: 'Error Badge',
+    secondaryAction: 'Secondary Action',
+    outlineButton: 'Outline Button',
+    testInputField: 'Test Input Field',
+    home: 'Home',
+    products: 'Products',
+    services: 'Services',
+    about: 'About',
+    contact: 'Contact',
+    card1Title: 'Card 1',
+    card2Title: 'Card 2',
+    card3Title: 'Card 3',
+    card1Description: 'This card tests how content flows in different directions.',
+    card2Description: 'Notice how buttons, text alignment, and spacing adapt automatically.',
+    card3Description: 'The layout maintains visual consistency across both directions.',
+    action: 'Action',
+    primaryAction: 'Primary Action',
     tableHeaders: {
       name: 'Name',
       email: 'Email',
@@ -41,6 +66,31 @@ const translations = {
     testParagraph: 'هذه فقرة تجريبية لإظهار نظام الترجمة. تُظهر كيف يتدفق النص من اليمين إلى اليسار للمحتوى العربي.',
     buttonText: 'اضغط هنا',
     inputPlaceholder: 'أدخل النص هنا',
+    directionTest: 'اختبار الاتجاه:',
+    directionTestDescription: 'يتغير هذا المحتوى تلقائياً بين اليسار-إلى-اليمين واليمين-إلى-اليسار بناءً على اللغة المختارة.',
+    dataTableTest: 'اختبار جدول البيانات',
+    navigationMenuTest: 'اختبار قائمة التنقل',
+    primaryBadge: 'شارة أساسية',
+    secondaryBadge: 'شارة ثانوية',
+    successBadge: 'شارة نجاح',
+    warningBadge: 'شارة تحذير',
+    errorBadge: 'شارة خطأ',
+    secondaryAction: 'إجراء ثانوي',
+    outlineButton: 'زر محدود',
+    testInputField: 'حقل إدخال تجريبي',
+    home: 'الرئيسية',
+    products: 'المنتجات',
+    services: 'الخدمات',
+    about: 'حول',
+    contact: 'اتصل بنا',
+    card1Title: 'البطاقة الأولى',
+    card2Title: 'البطاقة الثانية',
+    card3Title: 'البطاقة الثالثة',
+    card1Description: 'تختبر هذه البطاقة كيفية تدفق المحتوى في اتجاهات مختلفة.',
+    card2Description: 'لاحظ كيف تتكيف الأزرار ومحاذاة النص والمسافات تلقائياً.',
+    card3Description: 'يحافظ التخطيط على الاتساق البصري عبر كلا الاتجاهين.',
+    action: 'إجراء',
+    primaryAction: 'إجراء أساسي',
     tableHeaders: {
       name: 'الاسم',
       email: 'البريد الإلكتروني',
@@ -143,7 +193,7 @@ export const SimpleLocalizationDemo: React.FC = () => {
           </p>
           <div className="p-4 bg-blue-50 border border-blue-200 rounded-md">
             <div className="text-sm text-blue-800">
-              <strong>Direction Test:</strong> This content automatically switches between LTR and RTL based on the selected language.
+              <strong>{t.directionTest}</strong> {t.directionTestDescription}
             </div>
           </div>
         </div>
@@ -163,17 +213,17 @@ export const SimpleLocalizationDemo: React.FC = () => {
               {t.buttonText}
             </button>
             <button className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
-              Secondary Action
+              {t.secondaryAction}
             </button>
             <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              Outline Button
+              {t.outlineButton}
             </button>
           </div>
 
           {/* Input Test */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Test Input Field
+              {t.testInputField}
             </label>
             <input
               type="text"
@@ -185,19 +235,19 @@ export const SimpleLocalizationDemo: React.FC = () => {
           {/* Badge Test */}
           <div className="flex flex-wrap gap-2 mb-6">
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-              Primary Badge
+              {t.primaryBadge}
             </span>
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-              Secondary Badge
+              {t.secondaryBadge}
             </span>
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-              Success Badge
+              {t.successBadge}
             </span>
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-              Warning Badge
+              {t.warningBadge}
             </span>
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-              Error Badge
+              {t.errorBadge}
             </span>
           </div>
         </div>
@@ -205,7 +255,7 @@ export const SimpleLocalizationDemo: React.FC = () => {
         {/* Table Test */}
         <div className="p-8 bg-white rounded-lg shadow-sm border border-gray-200">
           <h3 className="text-xl font-semibold text-gray-900 mb-4">
-            Data Table Test
+            {t.dataTableTest}
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse border border-gray-300">

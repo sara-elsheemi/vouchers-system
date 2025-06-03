@@ -6,7 +6,20 @@
 
 /* RTL-specific overrides */
 [dir="rtl"] {
-  text-align: right;
+  text-align: start;
+}
+
+[dir="ltr"] {
+  text-align: start;
+}
+
+/* Enhanced RTL text alignment */
+[dir="rtl"] .text-start {
+  text-align: start !important;
+}
+
+[dir="rtl"] .text-end {
+  text-align: end !important;
 }
 
 [dir="rtl"] .text-left {

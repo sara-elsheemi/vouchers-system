@@ -1,15 +1,11 @@
-import React from 'react';
-import { LocalizationProvider } from '../application/i18n/LocalizationProvider';
-import { LocalizationTestPage } from '../presentation/pages/LocalizationTestPage';
+import { SimpleLocalizationDemo } from '../presentation/pages/SimpleLocalizationDemo';
 import '../presentation/styles/globals.css';
 
 function App() {
   return (
-    <LocalizationProvider>
-      <div className="App">
-        <LocalizationTestPage />
-      </div>
-    </LocalizationProvider>
+    <div className="App">
+      <SimpleLocalizationDemo />
+    </div>
   );
 }
 

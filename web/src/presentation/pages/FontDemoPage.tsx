@@ -1,8 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocalization } from '../../application/i18n/LocalizationProvider';
 
 export const FontDemoPage: React.FC = () => {
   const { language, changeLanguage } = useLocalization();
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -10,10 +12,10 @@ export const FontDemoPage: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Font in use: SakrPro
+            {t('fontDemo.title')}
           </h1>
           <p className="text-lg text-gray-600">
-            Custom SakrPro font integration across the entire system
+            {t('fontDemo.subtitle')}
           </p>
         </div>
 
@@ -47,34 +49,34 @@ export const FontDemoPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           {/* English Samples */}
           <div className="bg-white rounded-lg shadow-sm border p-6">
-            <h2 className="text-2xl font-bold mb-6 text-gray-900">English Text Samples</h2>
+            <h2 className="text-2xl font-bold mb-6 text-gray-900">{t('fontDemo.englishSamples')}</h2>
             
             <div className="space-y-4">
               <div>
-                <span className="text-sm text-gray-500 block mb-1">Light (300)</span>
+                <span className="text-sm text-gray-500 block mb-1">{t('fontDemo.fontWeights.light')}</span>
                 <p className="text-xl font-light text-gray-900">
-                  The quick brown fox jumps over the lazy dog.
+                  {t('fontDemo.sampleText')}
                 </p>
               </div>
               
               <div>
-                <span className="text-sm text-gray-500 block mb-1">Regular (400)</span>
+                <span className="text-sm text-gray-500 block mb-1">{t('fontDemo.fontWeights.regular')}</span>
                 <p className="text-xl font-normal text-gray-900">
-                  The quick brown fox jumps over the lazy dog.
+                  {t('fontDemo.sampleText')}
                 </p>
               </div>
               
               <div>
-                <span className="text-sm text-gray-500 block mb-1">Medium (500)</span>
+                <span className="text-sm text-gray-500 block mb-1">{t('fontDemo.fontWeights.medium')}</span>
                 <p className="text-xl font-medium text-gray-900">
-                  The quick brown fox jumps over the lazy dog.
+                  {t('fontDemo.sampleText')}
                 </p>
               </div>
               
               <div>
-                <span className="text-sm text-gray-500 block mb-1">Bold (700)</span>
+                <span className="text-sm text-gray-500 block mb-1">{t('fontDemo.fontWeights.bold')}</span>
                 <p className="text-xl font-bold text-gray-900">
-                  The quick brown fox jumps over the lazy dog.
+                  {t('fontDemo.sampleText')}
                 </p>
               </div>
             </div>
@@ -82,34 +84,34 @@ export const FontDemoPage: React.FC = () => {
 
           {/* Arabic Samples */}
           <div className="bg-white rounded-lg shadow-sm border p-6">
-            <h2 className="text-2xl font-bold mb-6 text-gray-900">Arabic Text Samples</h2>
+            <h2 className="text-2xl font-bold mb-6 text-gray-900">{t('fontDemo.arabicSamples')}</h2>
             
             <div className="space-y-4">
               <div>
-                <span className="text-sm text-gray-500 block mb-1">خفيف (300)</span>
+                <span className="text-sm text-gray-500 block mb-1">{t('fontDemo.arabicFontWeights.light')}</span>
                 <p className="text-xl font-light text-gray-900 text-right" dir="rtl">
-                  نص تجريبي باللغة العربية لاختبار خط سكر برو
+                  {t('fontDemo.arabicSampleText')}
                 </p>
               </div>
               
               <div>
-                <span className="text-sm text-gray-500 block mb-1">عادي (400)</span>
+                <span className="text-sm text-gray-500 block mb-1">{t('fontDemo.arabicFontWeights.regular')}</span>
                 <p className="text-xl font-normal text-gray-900 text-right" dir="rtl">
-                  نص تجريبي باللغة العربية لاختبار خط سكر برو
+                  {t('fontDemo.arabicSampleText')}
                 </p>
               </div>
               
               <div>
-                <span className="text-sm text-gray-500 block mb-1">متوسط (500)</span>
+                <span className="text-sm text-gray-500 block mb-1">{t('fontDemo.arabicFontWeights.medium')}</span>
                 <p className="text-xl font-medium text-gray-900 text-right" dir="rtl">
-                  نص تجريبي باللغة العربية لاختبار خط سكر برو
+                  {t('fontDemo.arabicSampleText')}
                 </p>
               </div>
               
               <div>
-                <span className="text-sm text-gray-500 block mb-1">عريض (700)</span>
+                <span className="text-sm text-gray-500 block mb-1">{t('fontDemo.arabicFontWeights.bold')}</span>
                 <p className="text-xl font-bold text-gray-900 text-right" dir="rtl">
-                  نص تجريبي باللغة العربية لاختبار خط سكر برو
+                  {t('fontDemo.arabicSampleText')}
                 </p>
               </div>
             </div>
@@ -118,17 +120,17 @@ export const FontDemoPage: React.FC = () => {
 
         {/* Typography Scale */}
         <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
-          <h2 className="text-2xl font-bold mb-6 text-gray-900">Typography Scale</h2>
+          <h2 className="text-2xl font-bold mb-6 text-gray-900">{t('fontDemo.typographyScale')}</h2>
           
           <div className="space-y-3">
-            <p className="text-xs text-gray-700">Extra Small (12px) - SakrPro Font</p>
-            <p className="text-sm text-gray-700">Small (14px) - SakrPro Font</p>
-            <p className="text-base text-gray-700">Base (16px) - SakrPro Font</p>
-            <p className="text-lg text-gray-700">Large (18px) - SakrPro Font</p>
-            <p className="text-xl text-gray-700">Extra Large (20px) - SakrPro Font</p>
-            <p className="text-2xl text-gray-700">2X Large (24px) - SakrPro Font</p>
-            <p className="text-3xl text-gray-700">3X Large (30px) - SakrPro Font</p>
-            <p className="text-4xl text-gray-700">4X Large (36px) - SakrPro Font</p>
+            <p className="text-xs text-gray-700">{t('fontDemo.typographySizes.xs')}</p>
+            <p className="text-sm text-gray-700">{t('fontDemo.typographySizes.sm')}</p>
+            <p className="text-base text-gray-700">{t('fontDemo.typographySizes.base')}</p>
+            <p className="text-lg text-gray-700">{t('fontDemo.typographySizes.lg')}</p>
+            <p className="text-xl text-gray-700">{t('fontDemo.typographySizes.xl')}</p>
+            <p className="text-2xl text-gray-700">{t('fontDemo.typographySizes.2xl')}</p>
+            <p className="text-3xl text-gray-700">{t('fontDemo.typographySizes.3xl')}</p>
+            <p className="text-4xl text-gray-700">{t('fontDemo.typographySizes.4xl')}</p>
           </div>
         </div>
 

@@ -44,14 +44,16 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
               <svg
                 className="w-6 h-6 text-white"
                 viewBox="0 0 24 24"
-                fill="currentColor"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <path d="M20 7V5c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v2c1.1 0 2 .9 2 2s-.9 2-2 2v2c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-2c-1.1 0-2-.9-2-2s.9-2 2-2zm-2 4H6V9h12v2zm0-4H6V5h12v2z"/>
-                <circle cx="8" cy="10" r="0.5"/>
-                <circle cx="10" cy="10" r="0.5"/>
-                <circle cx="12" cy="10" r="0.5"/>
-                <circle cx="14" cy="10" r="0.5"/>
-                <circle cx="16" cy="10" r="0.5"/>
+                <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2Z"/>
+                <path d="M13 5v2"/>
+                <path d="M13 17v2"/>
+                <path d="M13 11v2"/>
               </svg>
             </div>
             <div>
@@ -84,14 +86,16 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
             <svg
               className="w-6 h-6 text-white"
               viewBox="0 0 24 24"
-              fill="currentColor"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <path d="M20 7V5c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v2c1.1 0 2 .9 2 2s-.9 2-2 2v2c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-2c-1.1 0-2-.9-2-2s.9-2 2-2zm-2 4H6V9h12v2zm0-4H6V5h12v2z"/>
-              <circle cx="8" cy="10" r="0.5"/>
-              <circle cx="10" cy="10" r="0.5"/>
-              <circle cx="12" cy="10" r="0.5"/>
-              <circle cx="14" cy="10" r="0.5"/>
-              <circle cx="16" cy="10" r="0.5"/>
+              <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2Z"/>
+              <path d="M13 5v2"/>
+              <path d="M13 17v2"/>
+              <path d="M13 11v2"/>
             </svg>
           </div>
           <div>

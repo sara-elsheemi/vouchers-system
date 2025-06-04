@@ -482,15 +482,23 @@ func loggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
 func initDatabase() error {
         var connString string
         if dbURL := os.Getenv("DATABASE_URL"); dbURL != "" {
-                // For Neon database, ensure proper SSL and endpoint configuration
-                if !strings.Contains(dbURL, "sslmode") {
-                        if strings.Contains(dbURL, "?") {
-                                connString = dbURL + "&sslmode=require"
-                        } else {
-                                connString = dbURL + "?sslmode=require"
+                connString = dbURL
+                // For Neon database, add endpoint ID parameter if not present
+                if strings.Contains(dbURL, "neon.tech") && !strings.Contains(dbURL, "options=endpoint") {
+                        // Extract endpoint ID from hostname (e.g., ep-soft-grass-a6bocape)
+                        if strings.Contains(dbURL, "ep-") {
+                                parts := strings.Split(dbURL, "@")
+                                if len(parts) > 1 {
+                                        hostPart := strings.Split(parts[1], ".")[0]
+                                        if strings.HasPrefix(hostPart, "ep-") {
+                                                if strings.Contains(connString, "?") {
+                                                        connString += "&options=endpoint%3D" + hostPart
+                                                } else {
+                                                        connString += "?options=endpoint%3D" + hostPart
+                                                }
+                                        }
+                                }
                         }
-                } else {
-                        connString = dbURL
                 }
         } else {
                 connString = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",

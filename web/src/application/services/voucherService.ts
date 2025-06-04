@@ -4,7 +4,8 @@ import { Voucher, VoucherListResponse } from '../../domain/models/voucher';
 export class VoucherService {
   private readonly baseUrl: string;
 
-  constructor(baseUrl: string = 'http://0.0.0.0:5000') {
+  constructor(baseUrl: string = '/api') {
+    // Use relative URL for API calls to avoid CORS issues
     this.baseUrl = baseUrl;
   }
 

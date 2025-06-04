@@ -1,7 +1,6 @@
 import React from 'react';
 import { Voucher } from '../../../domain/models/voucher';
 import { VoucherService } from '../../../application/services/voucherService';
-import { Badge } from '../ui/core/Badge/Badge';
 import { Clock } from 'lucide-react';
 
 interface VoucherCardProps {
@@ -23,16 +22,7 @@ export const VoucherCard: React.FC<VoucherCardProps> = ({
     }
   };
 
-  const getStatusBadgeVariant = () => {
-    switch (voucher.status) {
-      case 'active':
-        return 'success';
-      case 'redeemed':
-        return 'secondary';
-      default:
-        return 'secondary';
-    }
-  };
+
 
   const getStatusText = () => {
     return voucher.status === 'active' ? 'Active' : 'Used';
@@ -63,13 +53,13 @@ export const VoucherCard: React.FC<VoucherCardProps> = ({
           <h3 className="text-lg font-semibold text-neutral-900 leading-tight flex-1 mr-2">
             {voucher.title}
           </h3>
-          <Badge 
-            variant={getStatusBadgeVariant()} 
-            size="sm"
-            className="flex-shrink-0"
-          >
+          <div className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${
+            voucher.status === 'active' 
+              ? 'bg-green-100 text-green-800' 
+              : 'bg-gray-100 text-gray-800'
+          }`}>
             {getStatusText()}
-          </Badge>
+          </div>
         </div>
 
         {/* Description */}

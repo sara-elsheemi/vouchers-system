@@ -1,0 +1,149 @@
+📄 Product Requirements Document (PRD): Voucher System WebView for 4Sale
+🧩 Overview
+This PRD outlines the development of a voucher system web application, embedded in the existing 4Sale mobile app (iOS & Android) via WebView. The system is to be built with a secure, scalable, and testable architecture.
+
+The feature allows sellers to create vouchers linked to ads, buyers to purchase them through 4Sale’s payment system, and both parties to track and redeem vouchers via QR codes.
+
+👥 User Roles
+Seller
+
+Posts ads under a new "Vouchers" category within the 4Sale app
+
+Triggers voucher creation via a webhook
+
+Buyer
+
+Purchases vouchers
+
+Views all purchased vouchers in a WebView interface
+
+Can display and redeem QR code linked to each voucher
+
+🔁 Flow Summary
+Seller Flow
+
+Posts an ad in the “Voucher” category from within the 4Sale app
+
+4Sale backend sends a webhook with voucher data to the voucher system
+
+Voucher Creation
+
+Voucher system stores the voucher metadata
+
+Buyer Flow
+
+Buyer purchases the voucher via 4Sale’s payment system
+
+Purchase is communicated via a webhook
+
+A unique QR code is generated and stored
+
+Viewing & Redemption
+
+Buyer accesses vouchers through a WebView in the 4Sale app
+
+Upon redemption, a webhook updates voucher status to redeemed
+
+⚙️ Tech Stack Requirements
+Backend: Go (Golang) using Hexagonal Architecture (Ports & Adapters)
+
+Frontend: React with Onion Architecture (Domain-Centric)
+
+Integration: WebView within the 4Sale app
+
+Webhook Security: All endpoints must be secure and validated
+
+🔌 API & Webhook Contracts
+🔧 Webhooks
+Voucher Created
+POST /webhook/voucher-created
+Payload:
+
+json
+Copy
+Edit
+{ "adv_id": ..., "user_id": ..., "title": ..., "description": ..., "price": ..., "photo": ... }
+Voucher Purchased
+POST /webhook/voucher-purchased
+Payload:
+
+json
+Copy
+Edit
+{ "voucher_id": ..., "buyer_id": ... }
+Voucher Redeemed
+POST /webhook/voucher-redeemed
+Payload:
+
+json
+Copy
+Edit
+{ "voucher_id": ..., "redeemed_at": ... }
+🧾 WebView Endpoints
+GET /vouchers/:user_id – Returns list of vouchers for the user
+
+Each voucher includes:
+
+Title
+
+Description
+
+Status: active / redeemed
+
+Photo
+
+QR Code (if active)
+
+🎨 UI Implementation from Designs
+Designs for the WebView screens will be based on Figma screenshots provided. Screens will cover:
+
+Voucher List View
+
+Voucher Detail View
+
+Redeemed State
+
+Empty State (optional)
+
+Loading and error states (if defined in Figma)
+
+Please attach the relevant Figma screenshots for the design team to reference during frontend development. The implementation will mirror these designs as closely as possible in terms of layout, components, and mobile responsiveness.
+
+🔐 Security & Auth
+Token-based auth via WebView passed in headers
+
+Input validation & sanitization for all user-generated data
+
+Secrets stored via .env configuration
+
+QR codes must be non-guessable and unique per purchase
+
+🧪 Testing Strategy
+TDD-first approach for backend and frontend
+
+All tests must:
+
+Use a live test DB
+
+Dynamically create test users and vouchers
+
+Validate user flows: create, purchase, view, redeem
+
+Assert data consistency between UI and DB
+
+Clean up all test data post-run
+
+✅ Deliverables
+Go backend with full hexagonal architecture and webhook handlers
+
+React frontend using onion architecture
+
+UI for listing and viewing vouchers (based on Figma)
+
+QR code generation module
+
+Secure WebView-ready integration
+
+.env support, Dockerfile, CI pipeline setup
+
+Full test suite (unit, integration, E2E)

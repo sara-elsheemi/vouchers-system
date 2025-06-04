@@ -1,0 +1,281 @@
+Architecture Requirement: Golang Backend – Hexagonal (Ports & Adapters) Structure
+
+ 
+
+Instructions:
+
+ 
+
+Build the backend using **hexagonal architecture (ports and adapters)** in Go.
+
+Implement a modular folder structure separating **domain (core logic), application, adapters (infrastructure & delivery), ports (interfaces), configuration, and shared utilities**.
+
+Provide a detailed folder tree as part of the solution.
+
+ 
+
+**Folder Structure Specification:**
+
+ 
+
+ 
+
+/cmd
+
+  └── main.go
+
+ 
+
+/internal
+
+  ├── core
+
+  │   └── [domain]              # Domain logic (entities, value objects, domain services)
+
+  │       ├── entity.go
+
+  │       ├── service.go
+
+  │       └── valueobject.go
+
+  │
+
+  ├── port
+
+  │   ├── repository            # Repository interfaces
+
+  │   │   └── [domain]_repository.go
+
+  │   └── service               # Service interfaces
+
+  │       └── [service]_service.go
+
+  │
+
+  ├── adapter
+
+  │   ├── repository            # DB implementations
+
+  │   │   └── [domain]_[db].go
+
+  │   ├── service               # External service implementations
+
+  │   │   └── [service]_[provider].go
+
+  │   ├── rest                  # REST/HTTP handlers
+
+  │   │   └── [domain]_handler.go
+
+  │   └── middleware            # Middlewares (auth, logging, etc.)
+
+  │       └── [middleware].go
+
+  │
+
+  ├── app
+
+  │   └── [domain]_app.go       # Application services/use cases
+
+  │
+
+  └── config
+
+      ├── config.go
+
+      └── env.go
+
+ 
+
+/pkg
+
+  └── [shared].go               # Shared packages/utilities
+
+ 
+
+/migrations
+
+  └── [migration].sql           # DB migration scripts
+
+ 
+
+/docs
+
+  └── [doc].md                  # Documentation, diagrams
+
+ 
+
+/tests
+
+  └── [domain]_test.go          # Integration & acceptance tests
+
+ 
+
+**Key Guidelines:**
+
+Each domain ([domain1], [domain2], etc.) should have its own folder in `/internal/core/`.
+
+Use dependency injection to connect adapters to ports.
+
+No business logic in adapters or API handlers—keep all domain logic in `/core/`.
+
+All configuration/secrets in `/config/` (use env vars or config files, never hardcode).
+
+Prepare for extensibility: adding new adapters (e.g., gRPC, message bus) should not affect domain code.
+
+ 
+
+**Summary:**
+
+Generate a ready-to-use folder structure and Go module stubs following hexagonal architecture, and document your approach for maintainability and scalability.
+
+ 
+
+ 
+
+Frontend Architecture Requirement: React Web App – Onion Architecture Skeleton
+
+ 
+
+Instructions:
+
+ 
+
+Generate a React frontend project using **pure onion architecture** (not hexagonal, not layered by technical concern, but concentric, domain-centric layers).
+
+Do not include any sample features or business logic—use placeholders only.
+
+ 
+
+**Folder Structure:**
+
+ 
+
+/src
+
+/domain                 # The core of the onion: business rules, entities, value objects
+
+└── [entity].ts
+
+└── [valueObject].ts
+
+└── [domainService].ts
+
+ 
+
+/application            # Application layer: use cases, business workflows, service interfaces
+
+└── [useCase].ts
+
+└── [serviceInterface].ts
+
+ 
+
+/infrastructure         # External/infra: API clients, storage, 3rd-party adapters, service implementations
+
+└── api
+
+└── [apiClient].ts
+
+└── storage
+
+└── [storageService].ts
+
+└── [infrastructureService].ts
+
+ 
+
+/presentation           # UI layer: React components, pages, layouts, hooks, context, theming
+
+├── components
+
+├── pages
+
+├── hooks
+
+├── layout
+
+├── theme
+
+└── [presentationModule].ts
+
+ 
+
+/shared                 # Cross-cutting concerns: utils, types, constants
+
+├── utils
+
+├── types.ts
+
+├── constants.ts
+
+└── [other].ts
+
+ 
+
+/config
+
+└── env.ts
+
+└── [other].ts
+
+ 
+
+/assets
+
+├── images
+
+└── [other]
+
+ 
+
+/tests
+
+└── [layer].test.tsx
+
+ 
+
+index.html
+
+main.tsx or main.jsx
+
+vite.config.ts / webpack.config.js
+
+ 
+
+Root-level files:
+
+ 
+
+package.json
+
+tsconfig.json / jsconfig.json
+
+.env
+
+README.md
+
+ 
+
+**Guidelines:**
+
+**domain** is the innermost, independent layer—no dependencies on other layers.
+
+**application** depends only on domain, never on infra or presentation.
+
+**infrastructure** implements interfaces defined in application/domain, but never contains business logic.
+
+**presentation** (UI/React) depends only on application/services, never directly on infrastructure.
+
+**shared** is for cross-layer utilities and types.
+
+Use placeholders like [entity], [useCase], etc., for extensibility.
+
+Provide only the skeleton, not concrete implementations.
+
+ 
+
+**Summary:**
+
+Deliver a ready-to-use React frontend skeleton based on pure onion architecture, with well-separated domain, application, infrastructure, and presentation layers.
+
+No example features—only extensible placeholders.

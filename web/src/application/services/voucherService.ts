@@ -4,7 +4,7 @@ import { Voucher, VoucherListResponse } from '../../domain/models/voucher';
 export class VoucherService {
   private readonly baseUrl: string;
 
-  constructor(baseUrl: string = 'http://localhost:5000') {
+  constructor(baseUrl: string = 'http://0.0.0.0:5000') {
     this.baseUrl = baseUrl;
   }
 

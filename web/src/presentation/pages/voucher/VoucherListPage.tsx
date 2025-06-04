@@ -3,7 +3,7 @@ import { useVouchers } from '../../../application/hooks/useVouchers';
 import { VoucherCard } from '../../components/voucher/VoucherCard';
 import { VoucherSkeleton } from '../../components/voucher/VoucherSkeleton';
 import { EmptyState } from '../../components/voucher/EmptyState';
-import { VoucherDetailsModal } from '../../components/voucher/VoucherDetailsModal';
+import { VoucherDetailsModal } from '../../components/voucher';
 import { Voucher } from '../../../domain/models/voucher';
 
 interface VoucherListPageProps {

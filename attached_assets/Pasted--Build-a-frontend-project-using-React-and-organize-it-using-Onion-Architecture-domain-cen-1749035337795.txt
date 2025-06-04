@@ -1,0 +1,46 @@
+// Build a frontend project using **React** and organize it using **Onion Architecture** (domain-centric: domain > application > infrastructure > framework).
+
+// ✅ System Overview:
+// This is a Voucher System WebView embedded in the 4Sale mobile app (iOS & Android).
+// Users can view and redeem vouchers they’ve purchased, which are tied to classified ads.
+// This WebView should present purchased vouchers clearly and interactively.
+
+// 📲 Designs:
+// Designs are attached as screenshots from Figma.
+// All components must follow the previously defined design system: typography, spacing, colors, badges, and QR rendering must match the design visuals exactly.
+
+// 👥 User Role (Buyer):
+// - Can view all purchased vouchers via the WebView
+// - Can view a QR code if the voucher is active
+// - Can see whether each voucher is redeemed or not
+
+// 🔁 Business Flow:
+// 1. WebView loads with `user_id` passed via token or query param.
+// 2. Frontend calls `GET /vouchers/:user_id` to retrieve the buyer’s vouchers.
+// 3. Render each voucher as a card showing:
+//    - Title
+//    - Description
+//    - Status badge (Active or Redeemed)
+//    - Photo
+//    - QR Code (shown only if active)
+
+// ✅ Guidelines to Follow:
+// - ⚠️ **All code structure, logic, and component separation must follow the previously shared guidelines in this chat.**
+// - Use the Onion Architecture: separate domain logic, application logic, UI components, and infrastructure concerns.
+// - Create reusable components: `VoucherCard`, `QRCodeView`, `StatusBadge`, etc.
+// - All custom components must follow the Figma design system (colors, padding, layout).
+// - Framework: React (latest version)
+// - Styling: Use Tailwind CSS or styled-components (but adhere to Figma design system).
+// - State Management: Keep it lightweight using React Context or hooks.
+// - Handle auth token if passed in WebView query param.
+// - Mobile-first: Must be responsive and optimized for iPhone and Android sizes.
+
+// ✅ Output Must Include:
+// - Full React project with Onion Architecture
+// - Voucher List Page (default route)
+// - Modular components per the design system
+// - Domain models for voucher
+// - API service to fetch vouchers by user
+// - Sample `.env` and `README.md` with project and folder structure
+
+// 📎 Reminder: Follow the architectural and implementation constraints already defined in this chat when generating this project.

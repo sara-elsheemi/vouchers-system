@@ -2,13 +2,13 @@ package repository
 
 import (
         "context"
+        "database/sql"
         "fmt"
         "time"
 
         "4SaleBackendSkeleton/internal/domain"
         "4SaleBackendSkeleton/internal/infrastructure/database"
         "github.com/google/uuid"
-        "github.com/jackc/pgx/v4"
 )
 
 // VoucherPurchaseRepository implements the voucher purchase repository interface

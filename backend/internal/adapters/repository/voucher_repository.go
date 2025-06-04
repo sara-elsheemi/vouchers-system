@@ -52,7 +52,7 @@ func (r *VoucherRepository) GetVoucherByID(ctx context.Context, id uuid.UUID) (*
                 WHERE id = $1`
 
         var voucher domain.Voucher
-        err := r.db.Pool.QueryRow(ctx, query, id).Scan(
+        err := r.db.DB.QueryRowContext(ctx, query, id).Scan(
                 &voucher.ID,
                 &voucher.AdvID,
                 &voucher.UserID,
@@ -64,7 +64,7 @@ func (r *VoucherRepository) GetVoucherByID(ctx context.Context, id uuid.UUID) (*
         )
 
         if err != nil {
-                if err == pgx.ErrNoRows {
+                if err == sql.ErrNoRows {
                         return nil, fmt.Errorf("voucher not found")
                 }
                 return nil, fmt.Errorf("failed to get voucher: %w", err)
@@ -81,7 +81,7 @@ func (r *VoucherRepository) GetVouchersByUserID(ctx context.Context, userID int6
                 WHERE user_id = $1
                 ORDER BY created_at DESC`
 
-        rows, err := r.db.Pool.Query(ctx, query, userID)
+        rows, err := r.db.DB.QueryContext(ctx, query, userID)
         if err != nil {
                 return nil, fmt.Errorf("failed to query vouchers: %w", err)
         }

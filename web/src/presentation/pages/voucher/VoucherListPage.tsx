@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useVouchers } from '../../../application/hooks/useVouchers';
 import { VoucherCard } from '../../components/voucher/VoucherCard';
 import { VoucherSkeleton } from '../../components/voucher/VoucherSkeleton';
@@ -15,8 +16,21 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
   userId,
   className = '',
 }) => {
+  const { t, i18n } = useTranslation();
   const { vouchers, isLoading, error, refetch } = useVouchers(userId);
   const [selectedVoucher, setSelectedVoucher] = useState<Voucher | null>(null);
+
+  // Sort vouchers: active first, then inactive
+  const sortedVouchers = useMemo(() => {
+    return [...vouchers].sort((a, b) => {
+      // Active vouchers come first
+      if (a.status === 'active' && b.status !== 'active') return -1;
+      if (a.status !== 'active' && b.status === 'active') return 1;
+      
+      // If both have same status, sort by purchased date (newest first)
+      return new Date(b.purchased_at).getTime() - new Date(a.purchased_at).getTime();
+    });
+  }, [vouchers]);
 
   const handleVoucherClick = (voucher: Voucher) => {
     setSelectedVoucher(voucher);
@@ -34,13 +48,28 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
     }
   };
 
+  // Arabic pluralization for voucher count
+  const getVoucherCountText = (count: number) => {
+    if (i18n.language === 'ar') {
+      if (count === 0) return t('vouchers.vouchersAvailable_0');
+      if (count === 1) return t('vouchers.vouchersAvailable_1');
+      if (count === 2) return t('vouchers.vouchersAvailable_2');
+      if (count >= 3 && count <= 10) return t('vouchers.vouchersAvailable_few', { count });
+      if (count >= 11) return t('vouchers.vouchersAvailable_many', { count });
+      return t('vouchers.vouchersAvailable_other', { count });
+    } else {
+      // English pluralization
+      return t('vouchers.vouchersAvailable', { count });
+    }
+  };
+
   if (error) {
     return (
       <div className={`min-h-screen bg-neutral-50 ${className}`}>
         <div className="container mx-auto px-4 py-6">
           {/* Header */}
-          <div className="flex items-center mb-6">
-            <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center mr-3">
+          <div className="flex items-center mb-6 header-with-icon">
+            <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center header-icon">
               <svg
                 className="w-6 h-6 text-white"
                 viewBox="0 0 24 24"
@@ -56,9 +85,9 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
                 <path d="M13 11v2"/>
               </svg>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-neutral-900">My Vouchers</h1>
-              <p className="text-neutral-600 text-sm">Error loading vouchers</p>
+            <div className="header-text">
+              <h1 className="text-2xl font-bold text-neutral-900">{t('vouchers.myVouchers')}</h1>
+              <p className="text-neutral-600 text-sm">{t('vouchers.errorLoadingVouchers')}</p>
             </div>
           </div>
 
@@ -69,7 +98,7 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
               onClick={refetch}
               className="mt-2 text-red-600 hover:text-red-800 font-medium"
             >
-              Try Again
+              {t('vouchers.tryAgain')}
             </button>
           </div>
         </div>
@@ -81,8 +110,8 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
     <div className={`min-h-screen bg-neutral-50 ${className}`}>
       <div className="container mx-auto px-4 py-6">
         {/* Header */}
-        <div className="flex items-center mb-6">
-          <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center mr-3">
+        <div className="flex items-center mb-6 header-with-icon">
+          <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center header-icon">
             <svg
               className="w-6 h-6 text-white"
               viewBox="0 0 24 24"
@@ -98,12 +127,12 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
               <path d="M13 11v2"/>
             </svg>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-neutral-900">My Vouchers</h1>
+          <div className="header-text">
+            <h1 className="text-2xl font-bold text-neutral-900">{t('vouchers.myVouchers')}</h1>
             <p className="text-neutral-600 text-sm">
               {isLoading 
-                ? 'Loading vouchers...' 
-                : `${vouchers.length} voucher${vouchers.length !== 1 ? 's' : ''} available`
+                ? t('vouchers.loadingVouchers')
+                : getVoucherCountText(vouchers.length)
               }
             </p>
           </div>
@@ -118,7 +147,7 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
           <EmptyState onBrowseVouchers={handleBrowseVouchers} />
         ) : (
           <div className="space-y-4">
-            {vouchers.map((voucher) => (
+            {sortedVouchers.map((voucher) => (
               <VoucherCard
                 key={voucher.id}
                 voucher={voucher}

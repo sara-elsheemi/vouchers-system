@@ -62,6 +62,6 @@ db-restore:
 # Health checks
 health:
 	@echo "Checking backend health..."
-	@curl -f http://localhost:5000/health || echo "Backend unhealthy"
+	@curl -f http://localhost:3001/health || echo "Backend unhealthy"
 	@echo "Checking frontend..."
 	@curl -f http://localhost/ || echo "Frontend unhealthy"

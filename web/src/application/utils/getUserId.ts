@@ -4,7 +4,7 @@ export const getUserId = (): string | null => {
   const urlParams = new URLSearchParams(window.location.search);
   const userIdFromParams = urlParams.get('user_id');
   
-  if (userIdFromParams) {
+  if (userIdFromParams && isValidUserId(userIdFromParams)) {
     return userIdFromParams;
   }
 
@@ -12,13 +12,19 @@ export const getUserId = (): string | null => {
   const hashParams = new URLSearchParams(window.location.hash.substring(1));
   const userIdFromHash = hashParams.get('user_id');
   
-  if (userIdFromHash) {
+  if (userIdFromHash && isValidUserId(userIdFromHash)) {
     return userIdFromHash;
   }
 
-  // For demo purposes, return a default user ID
-  // In production, this would extract from JWT token or session
-  return '98765';
+  // No valid user_id found - return null to show authentication required screen
+  console.warn('No valid user_id found in URL parameters.');
+  return null;
+};
+
+// Validate user ID format
+const isValidUserId = (userId: string): boolean => {
+  // Accept numeric strings (can be customized based on your ID format)
+  return /^[0-9]+$/.test(userId) && userId.length > 0;
 };
 
 // Utility to extract auth token if provided
@@ -34,4 +40,19 @@ export const getAuthToken = (): string | null => {
 
   // Check if token is already stored
   return sessionStorage.getItem('auth_token');
+};
+
+// Utility to extract additional params that Android might send
+export const getAppParams = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const hashParams = new URLSearchParams(window.location.hash.substring(1));
+  
+  return {
+    userId: getUserId(),
+    token: getAuthToken(),
+    language: urlParams.get('lang') || hashParams.get('lang') || 'en',
+    theme: urlParams.get('theme') || hashParams.get('theme') || 'light',
+    returnUrl: urlParams.get('return_url') || hashParams.get('return_url'),
+    // Add more params as needed
+  };
 };

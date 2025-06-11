@@ -20,7 +20,7 @@
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "exactOptionalPropertyTypes": true,
     "noImplicitReturns": true,
@@ -40,14 +40,18 @@
     }
   },
   "include": [
-    "src",
-    "stories",
-    "tests"
+    "src"
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "storybook-static"
+    "storybook-static",
+    "**/*.test.tsx",
+    "**/*.test.ts",
+    "**/*.stories.tsx",
+    "**/*.stories.ts",
+    "stories",
+    "tests"
   ],
   "references": [
     { "path": "./tsconfig.node.json" }

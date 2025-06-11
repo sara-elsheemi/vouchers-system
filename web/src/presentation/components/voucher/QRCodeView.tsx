@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import QRCode from 'qrcode';
 import { AlertTriangle } from 'lucide-react';
 
@@ -15,6 +16,7 @@ export const QRCodeView: React.FC<QRCodeViewProps> = ({
   className = '',
   showWarning = true,
 }) => {
+  const { t } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export const QRCodeView: React.FC<QRCodeViewProps> = ({
   if (!qrData) {
     return (
       <div className={`flex items-center justify-center bg-neutral-100 rounded-lg ${className}`} style={{ width: size, height: size }}>
-        <span className="text-neutral-500 text-sm">No QR Code Available</span>
+        <span className="text-neutral-500 text-sm">{t('vouchers.noQRCodeAvailable')}</span>
       </div>
     );
   }
@@ -50,10 +52,10 @@ export const QRCodeView: React.FC<QRCodeViewProps> = ({
       {/* Warning Message */}
       {showWarning && (
         <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200 max-w-sm">
-          <div className="flex items-start">
+          <div className="flex items-start qr-warning">
             <AlertTriangle className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
             <p className="text-blue-800 text-sm">
-              Do not share this QR code. It can only be used once.
+              {t('vouchers.qrWarning')}
             </p>
           </div>
         </div>

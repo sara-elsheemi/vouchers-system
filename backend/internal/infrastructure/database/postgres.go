@@ -1,7 +1,7 @@
 package database
 
 import (
-        "database/sql"
+        "a/sql"
         "fmt"
 
         "4SaleBackendSkeleton/internal/infrastructure/config"

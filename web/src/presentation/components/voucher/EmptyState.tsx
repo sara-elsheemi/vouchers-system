@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/core/Button/Button';
 
 interface EmptyStateProps {
@@ -10,6 +11,8 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   onBrowseVouchers,
   className = '',
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className={`flex flex-col items-center justify-center py-16 px-6 text-center ${className}`}>
       {/* Icon */}
@@ -31,12 +34,12 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 
       {/* Title */}
       <h3 className="text-xl font-semibold text-neutral-900 mb-2">
-        No Vouchers Yet
+        {t('vouchers.noVouchersYet')}
       </h3>
 
       {/* Description */}
       <p className="text-neutral-600 mb-6 max-w-xs">
-        You haven't purchased any vouchers yet. Browse the 4Sale app to discover great deals.
+        {t('vouchers.noVouchersDescription')}
       </p>
 
       {/* Action Button */}
@@ -45,7 +48,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           onClick={onBrowseVouchers}
           className="px-6 py-3"
         >
-          Browse Vouchers
+          {t('vouchers.browseVouchers')}
         </Button>
       )}
     </div>

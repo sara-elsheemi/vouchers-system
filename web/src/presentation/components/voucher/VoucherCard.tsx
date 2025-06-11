@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Voucher } from '../../../domain/models/voucher';
 import { VoucherService } from '../../../application/services/voucherService';
 import { Clock } from 'lucide-react';
@@ -14,6 +15,7 @@ export const VoucherCard: React.FC<VoucherCardProps> = ({
   onClick,
   className = '',
 }) => {
+  const { t } = useTranslation();
   const voucherService = new VoucherService();
 
   const handleClick = () => {
@@ -22,10 +24,8 @@ export const VoucherCard: React.FC<VoucherCardProps> = ({
     }
   };
 
-
-
   const getStatusText = () => {
-    return voucher.status === 'active' ? 'Active' : 'Used';
+    return voucher.status === 'active' ? t('vouchers.active') : t('vouchers.used');
   };
 
   return (
@@ -49,11 +49,11 @@ export const VoucherCard: React.FC<VoucherCardProps> = ({
       {/* Voucher Content */}
       <div className="p-4">
         {/* Header with Title and Status */}
-        <div className="flex items-start justify-between mb-2">
-          <h3 className="text-lg font-semibold text-neutral-900 leading-tight flex-1 mr-2">
+        <div className="flex items-start justify-between mb-2 voucher-title-status">
+          <h3 className="text-lg font-semibold text-neutral-900 leading-tight flex-1 voucher-title">
             {voucher.title}
           </h3>
-          <div className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${
+          <div className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium flex-shrink-0 voucher-status-badge ${
             voucher.status === 'active' 
               ? 'bg-green-100 text-green-800' 
               : 'bg-gray-100 text-gray-800'
@@ -68,13 +68,13 @@ export const VoucherCard: React.FC<VoucherCardProps> = ({
         </p>
 
         {/* Footer with Price and Date */}
-        <div className="flex items-center justify-between">
-          <div className="text-blue-600 text-lg font-bold">
+        <div className="flex items-center justify-between voucher-footer-content">
+          <div className="text-blue-600 text-lg font-bold voucher-price ltr-content">
             {voucherService.formatPrice(voucher.price)}
           </div>
-          <div className="flex items-center text-neutral-500 text-sm">
+          <div className="flex items-center text-neutral-500 text-sm voucher-date">
             <Clock className="w-3 h-3 mr-1" />
-            {voucherService.formatDate(voucher.purchased_at)}
+            <span className="ltr-content">{voucherService.formatDate(voucher.purchased_at)}</span>
           </div>
         </div>
       </div>

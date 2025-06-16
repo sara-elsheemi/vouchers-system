@@ -8,7 +8,7 @@ import { getDirection } from '../application/i18n/config';
 import { authService, User } from '../domain/services/authService';
 
 function App() {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
 
   const appParams = getAppParams();
   const [user, setUser] = useState<User | null>(null);

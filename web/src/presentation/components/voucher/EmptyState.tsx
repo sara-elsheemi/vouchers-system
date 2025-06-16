@@ -46,7 +46,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       {onBrowseVouchers && (
         <Button
           onClick={onBrowseVouchers}
-          className="px-6 py-3"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 text-base max-w-sm"
+          size="lg"
+          style={{ borderRadius: '8px' }}
         >
           {t('vouchers.browseVouchers')}
         </Button>

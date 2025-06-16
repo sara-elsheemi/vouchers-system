@@ -1,12 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { QrCode } from 'lucide-react';
 import { useVouchers } from '../../../application/hooks/useVouchers';
 import { VoucherCard } from '../../components/voucher/VoucherCard';
 import { VoucherSkeleton } from '../../components/voucher/VoucherSkeleton';
 import { EmptyState } from '../../components/voucher/EmptyState';
 import { VoucherDetailsModal } from '../../components/voucher';
-import { QRScannerPage } from './QRScannerPage';
 import { Voucher } from '../../../domain/models/voucher';
 
 interface VoucherListPageProps {
@@ -21,7 +19,6 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
   const { t, i18n } = useTranslation();
   const { vouchers, isLoading, error, refetch } = useVouchers(userId);
   const [selectedVoucher, setSelectedVoucher] = useState<Voucher | null>(null);
-  const [showQRScanner, setShowQRScanner] = useState(false);
 
   // Sort vouchers: active first, then inactive
   const sortedVouchers = useMemo(() => {
@@ -41,20 +38,6 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
 
   const handleCloseModal = () => {
     setSelectedVoucher(null);
-  };
-
-  const handleOpenQRScanner = () => {
-    setShowQRScanner(true);
-  };
-
-  const handleCloseQRScanner = () => {
-    setShowQRScanner(false);
-  };
-
-  const handleRedemptionComplete = (voucherId: string) => {
-    // Refresh vouchers after redemption
-    refetch();
-    setShowQRScanner(false);
   };
 
   const handleBrowseVouchers = () => {
@@ -127,7 +110,7 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
     <div className={`min-h-screen bg-neutral-50 ${className}`}>
       <div className="container mx-auto px-4 py-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center mb-6">
           <div className="flex items-center header-with-icon">
             <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center header-icon">
               <svg
@@ -155,15 +138,6 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
               </p>
             </div>
           </div>
-          
-          {/* QR Scanner Button */}
-          <button
-            onClick={handleOpenQRScanner}
-            className="bg-green-600 hover:bg-green-700 text-white p-3 rounded-xl transition-colors flex items-center justify-center"
-            aria-label={t('scanner.scanQRCode', 'Scan QR Code')}
-          >
-            <QrCode className="w-6 h-6" />
-          </button>
         </div>
 
         {/* Content */}
@@ -193,16 +167,6 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
           onClose={handleCloseModal}
         />
       )}
-
-      {/* QR Scanner Page */}
-      {showQRScanner && (
-        <div className="fixed inset-0 bg-white z-50">
-          <QRScannerPage
-            onBack={handleCloseQRScanner}
-            onVoucherRedeemed={handleRedemptionComplete}
-          />
-        </div>
-      )}
     </div>
   );
-};
+}; 

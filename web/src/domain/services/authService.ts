@@ -43,8 +43,8 @@ export class AuthService {
   private baseUrl: string;
 
   constructor() {
-    // Use same host as current page for API calls
-    this.baseUrl = window.location.origin;
+    // Use backend API port 3001
+    this.baseUrl = 'http://localhost:3001';
   }
 
   async validateToken(token: string): Promise<User | null> {

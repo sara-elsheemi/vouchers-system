@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LocalizationProvider } from '../application/i18n/LocalizationProvider';
-import { VoucherListPage } from '../presentation/pages/voucher/VoucherListPage';
+import { AppRouter } from '../application/router/AppRouter';
 import { LoginPage } from '../presentation/pages/auth/LoginPage';
 import { getAppParams, getAuthToken } from '../application/utils/getUserId';
 import { getDirection } from '../application/i18n/config';
@@ -42,6 +42,14 @@ function App() {
   useEffect(() => {
     const validateUserToken = async () => {
       const token = getAuthToken();
+      const currentPath = window.location.pathname;
+      
+      // Allow QR scanner access without token
+      if (!token && (currentPath === '/scan-qr' || currentPath === '/scan-qr-code')) {
+        setAuthError(null);
+        setIsValidating(false);
+        return;
+      }
       
       if (!token) {
         setAuthError('no_token');
@@ -88,8 +96,12 @@ function App() {
     );
   }
 
-  // Show login page if authentication failed
-  if (authError || !user) {
+  // Check if we're on QR scanner page without authentication
+  const currentPath = window.location.pathname;
+  const isQRScannerPage = currentPath === '/scan-qr' || currentPath === '/scan-qr-code';
+  
+  // Show login page if authentication failed (but not for QR scanner)
+  if ((authError || !user) && !isQRScannerPage) {
     return (
       <LocalizationProvider>
         <LoginPage />
@@ -97,11 +109,14 @@ function App() {
     );
   }
 
-  // Use user_id from validated token response
+  // Use user_id from validated token response, or allow QR scanner without auth
   return (
     <LocalizationProvider>
       <div className="App">
-        <VoucherListPage userId={user.user_id.toString()} />
+        <AppRouter 
+          userId={user?.user_id?.toString() || undefined} 
+          isAuthenticated={!!user} 
+        />
       </div>
     </LocalizationProvider>
   );

@@ -78,9 +78,11 @@ export const QRScannerView: React.FC<QRScannerViewProps> = ({
   // Handle permission request
   const handleRequestPermission = async () => {
     clearError();
-    await checkPermission();
-    if (hasPermission) {
-      startScanning();
+    try {
+      // Request camera access directly which will trigger permission prompt
+      await startScanning();
+    } catch (error) {
+      console.error('Failed to request camera permission:', error);
     }
   };
 
@@ -97,21 +99,32 @@ export const QRScannerView: React.FC<QRScannerViewProps> = ({
     }
   };
 
-  // Render permission request
-  if (hasPermission === false) {
+  // Render permission request or initial state
+  if (hasPermission === false || hasPermission === null) {
     return (
       <Card className={`w-full max-w-md mx-auto ${className}`}>
         <CardHeader className="text-center">
           <CameraOff className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <CardTitle>{t('qrScanner.permissionRequired')}</CardTitle>
+          <CardTitle>
+            {hasPermission === false 
+              ? t('qrScanner.permissionRequired') 
+              : t('qrScanner.cameraSettings', 'Camera Setup')
+            }
+          </CardTitle>
         </CardHeader>
         <CardContent className="text-center space-y-4">
           <p className="text-muted-foreground">
-            {t('qrScanner.permissionDescription')}
+            {hasPermission === false 
+              ? t('qrScanner.permissionDescription', 'We need access to your camera to scan QR codes for voucher redemption.')
+              : t('qrScanner.instructions', 'Point your camera at a voucher QR code to scan and redeem it automatically.')
+            }
           </p>
           <Button onClick={handleRequestPermission} className="w-full">
             <Camera className="w-4 h-4 mr-2" />
-            {t('qrScanner.enableCamera')}
+            {hasPermission === false 
+              ? t('qrScanner.enableCamera') 
+              : t('qrScanner.startScanning')
+            }
           </Button>
           {onClose && (
             <Button variant="outline" onClick={onClose} className="w-full">

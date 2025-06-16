@@ -4,8 +4,8 @@ import { Voucher, VoucherListResponse } from '../../domain/models/voucher';
 export class VoucherService {
   private readonly baseUrl: string;
 
-  constructor(baseUrl: string = '') {
-    // Use empty base URL for combined container (no /api prefix needed)
+  constructor(baseUrl: string = 'http://localhost:3001') {
+    // Use backend API port 3001
     this.baseUrl = baseUrl;
   }
 

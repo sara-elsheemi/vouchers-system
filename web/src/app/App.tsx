@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { LocalizationProvider } from '../application/i18n/LocalizationProvider';
 import { VoucherListPage } from '../presentation/pages/voucher/VoucherListPage';
 import { LoginPage } from '../presentation/pages/auth/LoginPage';
-import { getUserId, getAppParams, getAuthToken } from '../application/utils/getUserId';
+import { getAppParams, getAuthToken } from '../application/utils/getUserId';
 import { getDirection } from '../application/i18n/config';
 import { authService, User } from '../domain/services/authService';
 
 function App() {
   const { t, i18n } = useTranslation();
-  const userId = getUserId();
+
   const appParams = getAppParams();
   const [user, setUser] = useState<User | null>(null);
   const [isValidating, setIsValidating] = useState(true);
@@ -68,14 +68,10 @@ function App() {
       }
     };
 
-    // If we have a cached user and no token issues, skip validation
-    const cachedUser = authService.getCachedUserData();
-    if (cachedUser && getAuthToken()) {
-      setUser(cachedUser);
-      setIsValidating(false);
-    } else {
-      validateUserToken();
-    }
+    // Always validate token - never trust cached data without validation
+    // Clear any potentially stale cached data on app start
+    authService.clearAuthData();
+    validateUserToken();
   }, []);
 
   // Show loading state while validating
@@ -101,28 +97,11 @@ function App() {
     );
   }
 
-  // For backward compatibility, still check for userId if no user from token
-  if (!userId && !user) {
-    return (
-      <LocalizationProvider>
-        <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-xl font-semibold text-neutral-900 mb-2">
-              {t('auth.authRequired')}
-            </h1>
-            <p className="text-neutral-600">
-              {t('auth.accessThroughApp')}
-            </p>
-          </div>
-        </div>
-      </LocalizationProvider>
-    );
-  }
-
+  // Use user_id from validated token response
   return (
     <LocalizationProvider>
       <div className="App">
-        <VoucherListPage userId={userId || user.user_id.toString()} />
+        <VoucherListPage userId={user.user_id.toString()} />
       </div>
     </LocalizationProvider>
   );

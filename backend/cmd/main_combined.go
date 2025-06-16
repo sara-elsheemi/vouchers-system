@@ -72,6 +72,68 @@ type RedeemVoucherRequest struct {
         RedeemedAt time.Time `json:"redeemed_at"`
 }
 
+// Authentication DTOs
+type LoginRequest struct {
+        Phone    string `json:"phone"`
+        Password string `json:"password"`
+}
+
+type TokenInfo struct {
+        AccessToken string      `json:"access_token"`
+        ExpiresAt   *time.Time  `json:"expires_at"`
+        Type        string      `json:"type"`
+}
+
+type UserType struct {
+        UserTypeName          string   `json:"user_type_name"`
+        UserTypeID            int      `json:"user_type_id"`
+        TargetCatID           *int     `json:"target_cat_id"`
+        AllowPostListing      bool     `json:"allow_post_listing"`
+        NotAllowedCategories  []int    `json:"not_allowed_categories"`
+        Permissions           []string `json:"permissions"`
+}
+
+type UserInfo struct {
+        UserID              int64     `json:"user_id"`
+        ParentUserID        *int64    `json:"parent_user_id"`
+        AllowFollow         int       `json:"allow_follow"`
+        Email               string    `json:"email"`
+        FirstName           string    `json:"first_name"`
+        FreeAds             string    `json:"free_ads"`
+        PremiumAds          string    `json:"premium_ads"`
+        Image               *string   `json:"image"`
+        IsEmailVerified     int       `json:"is_email_verified"`
+        NumberOfFollowers   int       `json:"number_of_followers"`
+        NumberOfFollowing   int       `json:"number_of_following"`
+        Phone               string    `json:"phone"`
+        Language            string    `json:"language"`
+        MemberSince         string    `json:"member_since"`
+        RegionID            int       `json:"region_id"`
+        IsFresh             int       `json:"is_fresh"`
+        IsBlock             int       `json:"is_block"`
+        UserType            *UserType `json:"user_type,omitempty"`
+        HasListings         bool      `json:"has_listings"`
+}
+
+type LoginData struct {
+        Token TokenInfo `json:"token"`
+        User  UserInfo  `json:"user"`
+}
+
+type LoginResponse struct {
+        Data    LoginData `json:"data"`
+        Message string    `json:"message"`
+}
+
+type TokenValidationData struct {
+        User UserInfo `json:"user"`
+}
+
+type TokenValidationResponse struct {
+        Data    TokenValidationData `json:"data"`
+        Message *string             `json:"message"`
+}
+
 // Response DTOs
 type APIResponse struct {
         Success bool        `json:"success"`
@@ -95,6 +157,30 @@ func generateQRCode(data string) string {
         timestamp := time.Now().Unix()
         qrData := fmt.Sprintf("%s-%d-%s", data, timestamp, generateUUID())
         return base64.StdEncoding.EncodeToString([]byte(qrData))
+}
+
+// Authentication utility functions
+func generateToken(userID int64) string {
+        // Simple token generation - in production, use JWT or proper token generation
+        timestamp := time.Now().Unix()
+        tokenData := fmt.Sprintf("user:%d:timestamp:%d:uuid:%s", userID, timestamp, generateUUID())
+        return base64.StdEncoding.EncodeToString([]byte(tokenData))
+}
+
+func validatePhoneNumber(phone string) bool {
+        // Basic phone validation - add more sophisticated validation as needed
+        return len(phone) >= 8 && len(phone) <= 15
+}
+
+func extractBearerToken(authHeader string) string {
+        if authHeader == "" {
+                return ""
+        }
+        parts := strings.Split(authHeader, " ")
+        if len(parts) != 2 || parts[0] != "Bearer" {
+                return ""
+        }
+        return parts[1]
 }
 
 // Database operations
@@ -198,10 +284,203 @@ func getUserVouchers(ctx context.Context, userID int64) ([]*UserVoucherResponse,
         return vouchers, nil
 }
 
+// Authentication database operations (mock implementation)
+func authenticateUser(ctx context.Context, phone, password string) (*UserInfo, error) {
+        // Mock authentication - in production, this would check against a real user database
+        // with proper password hashing
+        if phone == "1234567890" && password == "password123" {
+                return &UserInfo{
+                        UserID:              98765,
+                        ParentUserID:        nil,
+                        AllowFollow:         1,
+                        Email:               "test@example.com",
+                        FirstName:           "Test User",
+                        FreeAds:             "0.000",
+                        PremiumAds:          "0.000",
+                        Image:               nil,
+                        IsEmailVerified:     0,
+                        NumberOfFollowers:   0,
+                        NumberOfFollowing:   0,
+                        Phone:               phone,
+                        Language:            "en",
+                        MemberSince:         "2024-01-01T00:00:00.000000Z",
+                        RegionID:            1,
+                        IsFresh:             0,
+                        IsBlock:             0,
+                        UserType:            nil,
+                        HasListings:         false,
+                }, nil
+        }
+        return nil, fmt.Errorf("invalid credentials")
+}
+
+func validateToken(ctx context.Context, token string) (*UserInfo, time.Time, error) {
+        // Mock token validation - in production, this would validate JWT or check token database
+        if token == "" {
+                return nil, time.Time{}, fmt.Errorf("empty token")
+        }
+        
+        // For demo purposes, accept any non-empty token and return mock user with UserType for validation
+        userType := &UserType{
+                UserTypeName:         "normal",
+                UserTypeID:           6,
+                TargetCatID:          nil,
+                AllowPostListing:     true,
+                NotAllowedCategories: []int{3107},
+                Permissions:          []string{"bundle_enabled", "allow_post_listing"},
+        }
+        
+        user := &UserInfo{
+                UserID:              98765,
+                ParentUserID:        nil,
+                AllowFollow:         1,
+                Email:               "test@example.com",
+                FirstName:           "Test User",
+                FreeAds:             "0.000",
+                PremiumAds:          "954.350",
+                Image:               nil,
+                IsEmailVerified:     0,
+                NumberOfFollowers:   0,
+                NumberOfFollowing:   7,
+                Phone:               "1234567890",
+                Language:            "en",
+                MemberSince:         "2024-01-01T00:00:00.000000Z",
+                RegionID:            1,
+                IsFresh:             0,
+                IsBlock:             0,
+                UserType:            userType,
+                HasListings:         true,
+        }
+        
+        expiresAt := time.Now().Add(24 * time.Hour) // Token expires in 24 hours
+        return user, expiresAt, nil
+}
+
 // HTTP Handlers
 func writeJSONResponse(w http.ResponseWriter, status int, response APIResponse) {
         w.Header().Set("Content-Type", "application/json")
         w.WriteHeader(status)
+        json.NewEncoder(w).Encode(response)
+}
+
+// Authentication handlers
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+        if r.Method != http.MethodPost {
+                writeJSONResponse(w, http.StatusMethodNotAllowed, APIResponse{
+                        Success: false,
+                        Error:   "Method not allowed",
+                })
+                return
+        }
+
+        var req LoginRequest
+        if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+                writeJSONResponse(w, http.StatusBadRequest, APIResponse{
+                        Success: false,
+                        Error:   "Invalid request body",
+                })
+                return
+        }
+
+        // Validation
+        if req.Phone == "" || req.Password == "" {
+                writeJSONResponse(w, http.StatusBadRequest, APIResponse{
+                        Success: false,
+                        Error:   "Phone and password are required",
+                })
+                return
+        }
+
+        if !validatePhoneNumber(req.Phone) {
+                writeJSONResponse(w, http.StatusBadRequest, APIResponse{
+                        Success: false,
+                        Error:   "Invalid phone number format",
+                })
+                return
+        }
+
+        // Authenticate user
+        user, err := authenticateUser(r.Context(), req.Phone, req.Password)
+        if err != nil {
+                log.Printf("Authentication failed for phone %s: %v", req.Phone, err)
+                writeJSONResponse(w, http.StatusUnauthorized, APIResponse{
+                        Success: false,
+                        Error:   "Invalid credentials",
+                })
+                return
+        }
+
+        // Generate tokens
+        accessToken := generateToken(user.UserID)
+
+        tokenInfo := TokenInfo{
+                AccessToken: accessToken,
+                ExpiresAt:   nil, // null as per your example
+                Type:        "Bearer",
+        }
+
+        loginData := LoginData{
+                Token: tokenInfo,
+                User:  *user,
+        }
+
+        response := LoginResponse{
+                Data:    loginData,
+                Message: fmt.Sprintf("Welcome back, %s", user.FirstName),
+        }
+
+        log.Printf("User authenticated successfully: UserID=%d, Phone=%s", user.UserID, user.Phone)
+
+        w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(http.StatusOK)
+        json.NewEncoder(w).Encode(response)
+}
+
+func validateTokenHandler(w http.ResponseWriter, r *http.Request) {
+        if r.Method != http.MethodGet {
+                writeJSONResponse(w, http.StatusMethodNotAllowed, APIResponse{
+                        Success: false,
+                        Error:   "Method not allowed",
+                })
+                return
+        }
+
+        // Extract token from Authorization header
+        authHeader := r.Header.Get("Authorization")
+        token := extractBearerToken(authHeader)
+        
+        if token == "" {
+                writeJSONResponse(w, http.StatusUnauthorized, APIResponse{
+                        Success: false,
+                        Error:   "Authorization token required",
+                })
+                return
+        }
+
+        // Validate token
+        user, _, err := validateToken(r.Context(), token)
+        if err != nil {
+                log.Printf("Token validation failed: %v", err)
+                writeJSONResponse(w, http.StatusUnauthorized, APIResponse{
+                        Success: false,
+                        Error:   "Invalid or expired token",
+                })
+                return
+        }
+
+        validationData := TokenValidationData{
+                User: *user,
+        }
+
+        response := TokenValidationResponse{
+                Data:    validationData,
+                Message: nil, // null as per your example
+        }
+
+        log.Printf("Token validated successfully: UserID=%d", user.UserID)
+
+        w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(http.StatusOK)
         json.NewEncoder(w).Encode(response)
 }
 
@@ -470,7 +749,7 @@ func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
         return func(w http.ResponseWriter, r *http.Request) {
                 w.Header().Set("Access-Control-Allow-Origin", "*")
                 w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-                w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+                w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept, Version-Number, Device-Id, Accept-Language")
 
                 if r.Method == "OPTIONS" {
                         w.WriteHeader(http.StatusOK)
@@ -537,6 +816,12 @@ func main() {
 
         // Setup API routes
         http.HandleFunc("/health", corsMiddleware(loggingMiddleware(healthHandler)))
+        
+        // Authentication routes
+        http.HandleFunc("/api/v1/users/auth/login", corsMiddleware(loggingMiddleware(loginHandler)))
+        http.HandleFunc("/api/v1/users/auth/validate", corsMiddleware(loggingMiddleware(validateTokenHandler)))
+        
+        // Voucher webhook routes
         http.HandleFunc("/webhook/voucher-created", corsMiddleware(loggingMiddleware(createVoucherHandler)))
         http.HandleFunc("/webhook/voucher-purchased", corsMiddleware(loggingMiddleware(purchaseVoucherHandler)))
         http.HandleFunc("/webhook/voucher-redeemed", corsMiddleware(loggingMiddleware(redeemVoucherHandler)))
@@ -553,6 +838,8 @@ func main() {
         log.Printf("Frontend available at: http://%s/", addr)
         log.Printf("Health check available at: http://%s/health", addr)
         log.Printf("API endpoints:")
+        log.Printf("  POST /api/v1/users/auth/login")
+        log.Printf("  GET /api/v1/users/auth/validate")
         log.Printf("  POST /webhook/voucher-created")
         log.Printf("  POST /webhook/voucher-purchased")
         log.Printf("  POST /webhook/voucher-redeemed")

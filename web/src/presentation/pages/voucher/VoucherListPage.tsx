@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { QrCode } from 'lucide-react';
 import { useVouchers } from '../../../application/hooks/useVouchers';
 import { VoucherCard } from '../../components/voucher/VoucherCard';
 import { VoucherSkeleton } from '../../components/voucher/VoucherSkeleton';
 import { EmptyState } from '../../components/voucher/EmptyState';
 import { VoucherDetailsModal } from '../../components/voucher';
+import { QRScannerPage } from './QRScannerPage';
 import { Voucher } from '../../../domain/models/voucher';
 
 interface VoucherListPageProps {
@@ -19,6 +21,8 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
   const { t, i18n } = useTranslation();
   const { vouchers, isLoading, error, refetch } = useVouchers(userId);
   const [selectedVoucher, setSelectedVoucher] = useState<Voucher | null>(null);
+  const [showQRScanner, setShowQRScanner] = useState(false);
+  const [showQRScanner, setShowQRScanner] = useState(false);
 
   // Sort vouchers: active first, then inactive
   const sortedVouchers = useMemo(() => {
@@ -38,6 +42,20 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
 
   const handleCloseModal = () => {
     setSelectedVoucher(null);
+  };
+
+  const handleOpenQRScanner = () => {
+    setShowQRScanner(true);
+  };
+
+  const handleCloseQRScanner = () => {
+    setShowQRScanner(false);
+  };
+
+  const handleRedemptionComplete = (voucherId: string) => {
+    // Refresh vouchers after redemption
+    refetch();
+    setShowQRScanner(false);
   };
 
   const handleBrowseVouchers = () => {
@@ -110,32 +128,43 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
     <div className={`min-h-screen bg-neutral-50 ${className}`}>
       <div className="container mx-auto px-4 py-6">
         {/* Header */}
-        <div className="flex items-center mb-6 header-with-icon">
-          <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center header-icon">
-            <svg
-              className="w-6 h-6 text-white"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2Z"/>
-              <path d="M13 5v2"/>
-              <path d="M13 17v2"/>
-              <path d="M13 11v2"/>
-            </svg>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center header-with-icon">
+            <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center header-icon">
+              <svg
+                className="w-6 h-6 text-white"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2Z"/>
+                <path d="M13 5v2"/>
+                <path d="M13 17v2"/>
+                <path d="M13 11v2"/>
+              </svg>
+            </div>
+            <div className="header-text">
+              <h1 className="text-2xl font-bold text-neutral-900">{t('vouchers.myVouchers')}</h1>
+              <p className="text-neutral-600 text-sm">
+                {isLoading 
+                  ? t('vouchers.loadingVouchers')
+                  : getVoucherCountText(vouchers.length)
+                }
+              </p>
+            </div>
           </div>
-          <div className="header-text">
-            <h1 className="text-2xl font-bold text-neutral-900">{t('vouchers.myVouchers')}</h1>
-            <p className="text-neutral-600 text-sm">
-              {isLoading 
-                ? t('vouchers.loadingVouchers')
-                : getVoucherCountText(vouchers.length)
-              }
-            </p>
-          </div>
+          
+          {/* QR Scanner Button */}
+          <button
+            onClick={handleOpenQRScanner}
+            className="bg-green-600 hover:bg-green-700 text-white p-3 rounded-xl transition-colors flex items-center justify-center"
+            aria-label={t('scanner.scanQRCode', 'Scan QR Code')}
+          >
+            <QrCode className="w-6 h-6" />
+          </button>
         </div>
 
         {/* Content */}
@@ -164,6 +193,16 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
           voucher={selectedVoucher}
           onClose={handleCloseModal}
         />
+      )}
+
+      {/* QR Scanner Page */}
+      {showQRScanner && (
+        <div className="fixed inset-0 bg-white z-50">
+          <QRScannerPage
+            onBack={handleCloseQRScanner}
+            onComplete={handleRedemptionComplete}
+          />
+        </div>
       )}
     </div>
   );

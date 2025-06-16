@@ -10,6 +10,7 @@ import (
         "log"
         "net/http"
         "os"
+        "path/filepath"
         "strconv"
         "strings"
         "time"
@@ -223,7 +224,7 @@ func createVoucherHandler(w http.ResponseWriter, r *http.Request) {
         }
 
         // Validation
-        if req.AdvID <= 0 || req.UserID <= 0 || req.Title == "" || req.Price < 0 {
+        if req.AdvID <= 0 || req.UserID <= 0 || req.Title == "" || req.Price <= 0 {
                 writeJSONResponse(w, http.StatusBadRequest, APIResponse{
                         Success: false,
                         Error:   "Invalid request data",
@@ -231,6 +232,7 @@ func createVoucherHandler(w http.ResponseWriter, r *http.Request) {
                 return
         }
 
+        // Create voucher
         voucher := &Voucher{
                 ID:          generateUUID(),
                 AdvID:       req.AdvID,
@@ -251,9 +253,9 @@ func createVoucherHandler(w http.ResponseWriter, r *http.Request) {
                 return
         }
 
-        log.Printf("Voucher created: ID=%s, AdvID=%d, UserID=%d", voucher.ID, voucher.AdvID, voucher.UserID)
+        log.Printf("Voucher created: ID=%s, Title=%s, UserID=%d", voucher.ID, voucher.Title, voucher.UserID)
 
-        writeJSONResponse(w, http.StatusOK, APIResponse{
+        writeJSONResponse(w, http.StatusCreated, APIResponse{
                 Success: true,
                 Message: "Voucher created successfully",
                 Data:    voucher,
@@ -288,7 +290,7 @@ func purchaseVoucherHandler(w http.ResponseWriter, r *http.Request) {
         }
 
         // Check if voucher exists
-        _, err := getVoucherByID(r.Context(), req.VoucherID)
+        voucher, err := getVoucherByID(r.Context(), req.VoucherID)
         if err != nil {
                 writeJSONResponse(w, http.StatusNotFound, APIResponse{
                         Success: false,
@@ -297,27 +299,13 @@ func purchaseVoucherHandler(w http.ResponseWriter, r *http.Request) {
                 return
         }
 
-        // Check if already purchased
-        _, err = getPurchaseByVoucherID(r.Context(), req.VoucherID)
-        if err == nil {
-                writeJSONResponse(w, http.StatusConflict, APIResponse{
-                        Success: false,
-                        Error:   "Voucher already purchased",
-                })
-                return
-        }
-
-        // Generate QR code
-        qrData := fmt.Sprintf("voucher:%s:buyer:%d", req.VoucherID, req.BuyerID)
-        qrCode := generateQRCode(qrData)
-
+        // Create purchase
         purchase := &VoucherPurchase{
                 ID:         generateUUID(),
                 VoucherID:  req.VoucherID,
                 BuyerID:    req.BuyerID,
-                QRCode:     qrCode,
+                QRCode:     generateQRCode(req.VoucherID),
                 Status:     "active",
-                RedeemedAt: nil,
                 CreatedAt:  time.Now(),
         }
 
@@ -330,12 +318,16 @@ func purchaseVoucherHandler(w http.ResponseWriter, r *http.Request) {
                 return
         }
 
-        log.Printf("Voucher purchased: ID=%s, VoucherID=%s, BuyerID=%d", purchase.ID, purchase.VoucherID, purchase.BuyerID)
+        log.Printf("Voucher purchased: VoucherID=%s, BuyerID=%d, PurchaseID=%s", 
+                req.VoucherID, req.BuyerID, purchase.ID)
 
-        writeJSONResponse(w, http.StatusOK, APIResponse{
+        writeJSONResponse(w, http.StatusCreated, APIResponse{
                 Success: true,
                 Message: "Voucher purchased successfully",
-                Data:    purchase,
+                Data:    map[string]interface{}{
+                        "purchase": purchase,
+                        "voucher":  voucher,
+                },
         })
 }
 
@@ -453,6 +445,26 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
         })
 }
 
+// Static file serving handler
+func staticFileHandler(w http.ResponseWriter, r *http.Request) {
+        // Remove leading slash and serve from static directory
+        path := strings.TrimPrefix(r.URL.Path, "/")
+        if path == "" {
+                path = "index.html"
+        }
+        
+        staticDir := "./static"
+        fullPath := filepath.Join(staticDir, path)
+        
+        // Check if file exists
+        if _, err := os.Stat(fullPath); os.IsNotExist(err) {
+                // If file doesn't exist, serve index.html (for SPA routing)
+                fullPath = filepath.Join(staticDir, "index.html")
+        }
+        
+        http.ServeFile(w, r, fullPath)
+}
+
 // CORS middleware
 func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
         return func(w http.ResponseWriter, r *http.Request) {
@@ -515,7 +527,7 @@ func getEnv(key, defaultValue string) string {
 }
 
 func main() {
-        log.Println("Starting Voucher System API...")
+        log.Println("Starting Combined Voucher System (Frontend + Backend)...")
 
         // Initialize database
         if err := initDatabase(); err != nil {
@@ -523,27 +535,30 @@ func main() {
         }
         defer db.Close()
 
-        // Setup routes
+        // Setup API routes
         http.HandleFunc("/health", corsMiddleware(loggingMiddleware(healthHandler)))
         http.HandleFunc("/webhook/voucher-created", corsMiddleware(loggingMiddleware(createVoucherHandler)))
         http.HandleFunc("/webhook/voucher-purchased", corsMiddleware(loggingMiddleware(purchaseVoucherHandler)))
         http.HandleFunc("/webhook/voucher-redeemed", corsMiddleware(loggingMiddleware(redeemVoucherHandler)))
         http.HandleFunc("/vouchers/", corsMiddleware(loggingMiddleware(getUserVouchersHandler)))
+        
+        // Setup static file serving for frontend (all other routes)
+        http.HandleFunc("/", loggingMiddleware(staticFileHandler))
 
-        port := getEnv("PORT", "5000")
+        port := getEnv("PORT", "3001")
         host := getEnv("HOST", "0.0.0.0")
         addr := fmt.Sprintf("%s:%s", host, port)
 
-        log.Printf("Voucher System API starting on %s", addr)
+        log.Printf("Combined Voucher System starting on %s", addr)
+        log.Printf("Frontend available at: http://%s/", addr)
         log.Printf("Health check available at: http://%s/health", addr)
-        log.Printf("Webhook endpoints:")
+        log.Printf("API endpoints:")
         log.Printf("  POST /webhook/voucher-created")
         log.Printf("  POST /webhook/voucher-purchased")
         log.Printf("  POST /webhook/voucher-redeemed")
-        log.Printf("WebView API:")
         log.Printf("  GET /vouchers/{user_id}")
 
         if err := http.ListenAndServe(addr, nil); err != nil {
                 log.Fatalf("Server failed to start: %v", err)
         }
-}
+} 

@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  # Combined Voucher System (Frontend + Backend)
+  voucher-system:
+    build:
+      context: .
+      dockerfile: Dockerfile.combined
+    environment:
+      DB_HOST: staging-jan-4-2023-cluster.cluster-cylpew54lkmg.eu-west-1.rds.amazonaws.com
+      DB_PORT: 3306
+      DB_NAME: sc_voucher
+      DB_USER: sc_voucher_dbuser
+      DB_PASSWORD: "fOGYrE$$TEND!uNcen^dIVeN"
+      PORT: 3001
+      HOST: 0.0.0.0
+    ports:
+      - "3001:3001"
+    restart: unless-stopped 

@@ -1,40 +1,20 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_DB: voucher_system
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres123
-      PGDATA: /var/lib/postgresql/data/pgdata
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5432:5432"
-    networks:
-      - voucher-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
   # Go Backend API
   backend:
     build:
       context: .
       dockerfile: Dockerfile.backend
     environment:
-      DATABASE_URL: postgres://postgres:postgres123@postgres:5432/voucher_system?sslmode=disable
+      DB_HOST: staging-jan-4-2023-cluster.cluster-cylpew54lkmg.eu-west-1.rds.amazonaws.com
+      DB_PORT: 3306
+      DB_NAME: sc_voucher
+      DB_USER: sc_voucher_dbuser
+      DB_PASSWORD: "fOGYrE$$TEND!uNcen^dIVeN"
       PORT: 3001
     ports:
       - "3001:3001"
-    depends_on:
-      postgres:
-        condition: service_healthy
     networks:
       - voucher-network
     restart: unless-stopped
@@ -52,9 +32,7 @@ services:
       - voucher-network
     restart: unless-stopped
 
-volumes:
-  postgres_data:
-    driver: local
+# No volumes needed for external MySQL database
 
 networks:
   voucher-network:

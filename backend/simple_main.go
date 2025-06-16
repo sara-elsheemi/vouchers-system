@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	_ "github.com/lib/pq"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // Domain Models
@@ -100,7 +100,7 @@ func generateQRCode(data string) string {
 func createVoucher(ctx context.Context, voucher *Voucher) error {
 	query := `
 		INSERT INTO vouchers (id, adv_id, user_id, title, description, price, photo_url, created_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
 
 	_, err := db.ExecContext(ctx, query,
 		voucher.ID, voucher.AdvID, voucher.UserID, voucher.Title,
@@ -112,7 +112,7 @@ func createVoucher(ctx context.Context, voucher *Voucher) error {
 func getVoucherByID(ctx context.Context, id string) (*Voucher, error) {
 	query := `
 		SELECT id, adv_id, user_id, title, description, price, photo_url, created_at
-		FROM vouchers WHERE id = $1`
+		FROM vouchers WHERE id = ?`
 
 	var voucher Voucher
 	err := db.QueryRowContext(ctx, query, id).Scan(
@@ -128,7 +128,7 @@ func getVoucherByID(ctx context.Context, id string) (*Voucher, error) {
 func createPurchase(ctx context.Context, purchase *VoucherPurchase) error {
 	query := `
 		INSERT INTO voucher_purchases (id, voucher_id, buyer_id, qr_code, status, redeemed_at, created_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)`
+		VALUES (?, ?, ?, ?, ?, ?, ?)`
 
 	_, err := db.ExecContext(ctx, query,
 		purchase.ID, purchase.VoucherID, purchase.BuyerID, purchase.QRCode,
@@ -140,7 +140,7 @@ func createPurchase(ctx context.Context, purchase *VoucherPurchase) error {
 func getPurchaseByVoucherID(ctx context.Context, voucherID string) (*VoucherPurchase, error) {
 	query := `
 		SELECT id, voucher_id, buyer_id, qr_code, status, redeemed_at, created_at
-		FROM voucher_purchases WHERE voucher_id = $1`
+		FROM voucher_purchases WHERE voucher_id = ?`
 
 	var purchase VoucherPurchase
 	err := db.QueryRowContext(ctx, query, voucherID).Scan(
@@ -154,7 +154,7 @@ func getPurchaseByVoucherID(ctx context.Context, voucherID string) (*VoucherPurc
 }
 
 func updatePurchaseStatus(ctx context.Context, voucherID, status string, redeemedAt *time.Time) error {
-	query := `UPDATE voucher_purchases SET status = $1, redeemed_at = $2 WHERE voucher_id = $3`
+	query := `UPDATE voucher_purchases SET status = ?, redeemed_at = ? WHERE voucher_id = ?`
 	result, err := db.ExecContext(ctx, query, status, redeemedAt, voucherID)
 	if err != nil {
 		return err
@@ -174,7 +174,7 @@ func getUserVouchers(ctx context.Context, userID int64) ([]*UserVoucherResponse,
 			v.price, vp.created_at, vp.redeemed_at
 		FROM voucher_purchases vp
 		JOIN vouchers v ON vp.voucher_id = v.id
-		WHERE vp.buyer_id = $1
+		WHERE vp.buyer_id = ?
 		ORDER BY vp.created_at DESC`
 
 	rows, err := db.QueryContext(ctx, query, userID)
@@ -484,16 +484,17 @@ func initDatabase() error {
 	if dbURL := os.Getenv("DATABASE_URL"); dbURL != "" {
 		connString = dbURL
 	} else {
-		connString = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-			getEnv("PGHOST", "localhost"),
-			getEnv("PGPORT", "5432"),
-			getEnv("PGUSER", "postgres"),
-			getEnv("PGPASSWORD", ""),
-			getEnv("PGDATABASE", "postgres"))
+		// MySQL connection string format: user:password@tcp(host:port)/dbname
+		connString = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
+			getEnv("DB_USER", "sc_voucher_dbuser"),
+			getEnv("DB_PASSWORD", "fOGYrE$TEND!uNcen^dIVeN"),
+			getEnv("DB_HOST", "staging-jan-4-2023-cluster.cluster-cylpew54lkmg.eu-west-1.rds.amazonaws.com"),
+			getEnv("DB_PORT", "3306"),
+			getEnv("DB_NAME", "sc_voucher"))
 	}
 
 	var err error
-	db, err = sql.Open("postgres", connString)
+	db, err = sql.Open("mysql", connString)
 	if err != nil {
 		return fmt.Errorf("failed to open database: %w", err)
 	}
@@ -502,7 +503,7 @@ func initDatabase() error {
 		return fmt.Errorf("failed to ping database: %w", err)
 	}
 
-	log.Println("Database connection established")
+	log.Printf("MySQL database connection established to: %s", getEnv("DB_HOST", "staging-jan-4-2023-cluster.cluster-cylpew54lkmg.eu-west-1.rds.amazonaws.com"))
 	return nil
 }
 

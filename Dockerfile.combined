@@ -1,0 +1,61 @@
+# Combined Docker image for Voucher System (Frontend + Backend)
+FROM node:18-alpine AS frontend-builder
+
+# Build React frontend
+WORKDIR /app/frontend
+COPY web/package*.json ./
+RUN npm install
+COPY web/ .
+RUN npm run build
+
+# Go backend builder stage
+FROM golang:1.21-alpine AS backend-builder
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+RUN apk add --no-cache git
+
+# Copy go mod files
+COPY backend/go.mod backend/go.sum ./
+
+# Copy source code first
+COPY backend/ .
+
+# Now download and tidy modules
+RUN go mod download
+RUN go mod tidy
+
+# Build the combined application
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/main_combined.go
+
+# Final stage - single container with both frontend and backend
+FROM alpine:latest
+
+# Install necessary packages
+RUN apk --no-cache add ca-certificates tzdata mysql-client
+
+WORKDIR /root/
+
+# Copy backend binary
+COPY --from=backend-builder /app/main .
+
+# Copy frontend build files
+COPY --from=frontend-builder /app/frontend/dist ./static
+
+# Copy migrations
+COPY migrations/ ./migrations/
+
+# Make migrations script executable
+RUN chmod +x ./migrations/run_migrations.sh
+
+# Expose port
+EXPOSE 3001
+
+# Environment variables
+ENV PORT=3001
+ENV HOST=0.0.0.0
+
+# Run the combined application
+CMD ["./main"] 

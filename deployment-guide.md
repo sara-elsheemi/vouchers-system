@@ -41,14 +41,17 @@ curl http://localhost:5000/vouchers/98765
 ### Environment Variables
 Create a `.env` file:
 ```env
-POSTGRES_PASSWORD=your_secure_password_here
-DATABASE_URL=postgres://postgres:your_secure_password_here@postgres:5432/voucher_system?sslmode=disable
+DB_HOST=staging-jan-4-2023-cluster.cluster-cylpew54lkmg.eu-west-1.rds.amazonaws.com
+DB_PORT=3306
+DB_NAME=sc_voucher
+DB_USER=sc_voucher_dbuser
+DB_PASSWORD=your_secure_password_here
 ```
 
 ### Deploy to Production
 ```bash
 # Set environment variables
-export POSTGRES_PASSWORD=your_secure_password_here
+export DB_PASSWORD=your_secure_password_here
 
 # Deploy with production configuration
 make deploy-prod
@@ -91,7 +94,7 @@ The system includes 4 test vouchers for user ID `98765`:
 ### Backend (Go)
 - **Port**: 5000
 - **Architecture**: Hexagonal (Ports & Adapters)
-- **Database**: PostgreSQL with connection pooling
+- **Database**: MySQL (AWS RDS) with connection pooling
 - **Features**: CORS enabled, structured logging, health checks
 
 ### Frontend (React)
@@ -100,9 +103,9 @@ The system includes 4 test vouchers for user ID `98765`:
 - **Features**: TypeScript, Tailwind CSS, shimmer loading effects
 - **Mobile**: WebView optimized with responsive design
 
-### Database (PostgreSQL)
-- **Port**: 5432
-- **Version**: 15 Alpine
+### Database (MySQL)
+- **Port**: 3306
+- **Version**: External AWS RDS
 - **Features**: UUID support, indexed queries, sample data
 
 ## Management Commands
@@ -130,7 +133,7 @@ The deployment creates three optimized Docker images:
 
 1. **Backend**: Multi-stage Go build (Alpine-based, ~15MB)
 2. **Frontend**: React build with Nginx (Alpine-based, ~25MB) 
-3. **Database**: PostgreSQL 15 Alpine with initialization
+3. **Database**: External MySQL (AWS RDS)
 
 ## Security Features
 
@@ -149,7 +152,7 @@ The deployment creates three optimized Docker images:
 - Verify database connection: `make health`
 
 **Database connection issues**
-- Check PostgreSQL logs: `make logs-db`
+- Test database connection: `make test-db`
 - Verify DATABASE_URL environment variable
 
 **Port conflicts**
@@ -162,7 +165,7 @@ The deployment creates three optimized Docker images:
 docker-compose exec backend sh
 
 # Enter database
-docker-compose exec postgres psql -U postgres voucher_system
+mysql -h staging-jan-4-2023-cluster.cluster-cylpew54lkmg.eu-west-1.rds.amazonaws.com -P 3306 -u sc_voucher_dbuser -p sc_voucher
 
 # View detailed logs
 docker-compose logs -f --tail=50 backend
@@ -171,7 +174,7 @@ docker-compose logs -f --tail=50 backend
 ## Scaling
 
 For production scaling:
-- Use external PostgreSQL (AWS RDS, Google Cloud SQL)
+- Use external MySQL (AWS RDS, Google Cloud SQL)
 - Deploy frontend to CDN
 - Use load balancer for backend API
 - Configure horizontal pod autoscaling in Kubernetes

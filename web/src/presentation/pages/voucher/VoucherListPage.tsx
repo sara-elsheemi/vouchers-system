@@ -22,7 +22,6 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
   const { vouchers, isLoading, error, refetch } = useVouchers(userId);
   const [selectedVoucher, setSelectedVoucher] = useState<Voucher | null>(null);
   const [showQRScanner, setShowQRScanner] = useState(false);
-  const [showQRScanner, setShowQRScanner] = useState(false);
 
   // Sort vouchers: active first, then inactive
   const sortedVouchers = useMemo(() => {
@@ -200,7 +199,7 @@ export const VoucherListPage: React.FC<VoucherListPageProps> = ({
         <div className="fixed inset-0 bg-white z-50">
           <QRScannerPage
             onBack={handleCloseQRScanner}
-            onComplete={handleRedemptionComplete}
+            onVoucherRedeemed={handleRedemptionComplete}
           />
         </div>
       )}
